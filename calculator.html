@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Leak Calculator — Big Oak Technologies</title>
+<meta name="description" content="See how much revenue your website is currently losing, and what a conversion-optimized funnel could recover. Free, instant, no obligation.">
+<link rel="icon" href="assets/img/bigoaklogo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  /* ---- Calculator-page-only styles ---- */
+  .calc-grid{ display:grid; grid-template-columns:0.95fr 1.05fr; gap:var(--gap); align-items:start; }
+  @media(max-width:960px){ .calc-grid{ grid-template-columns:1fr; } }
+  .calc-panel{ background:var(--paper); border:1px solid var(--line); padding:34px; }
+  .calc-panel h3{ font-size:20px; margin-bottom:6px; }
+  .calc-panel .hint{ font-size:12.5px; color:var(--muted); margin:-10px 0 16px; font-family:'JetBrains Mono', monospace; }
+  .field-row{ margin-bottom:16px; }
+  .field-row label{ font-size:12px; color:var(--muted); font-family:'JetBrains Mono', monospace; margin-bottom:6px; display:block; text-transform:uppercase; letter-spacing:.04em; }
+  .field-row .optional{ text-transform:none; letter-spacing:0; color:var(--muted); font-family:'Inter'; font-weight:400; }
+  .field-row input{ width:100%; padding:13px 14px; border-radius:var(--radius); border:1.5px solid var(--line); font-family:'Inter'; font-size:15px; background:var(--paper); color:var(--ink-2); }
+  .field-row input:focus{ outline:none; border-color:var(--magenta); }
+  .field-note{ font-size:11.5px; color:var(--muted); margin-top:5px; font-family:'JetBrains Mono', monospace; }
+  #calcStatus{ font-size:13px; color:var(--magenta); margin-top:10px; display:none; }
+
+  .results-panel{ border:1px solid var(--ink); background:var(--ink); color:#fff; }
+  .results-empty{ padding:60px 34px; text-align:center; color:var(--on-ink-muted); }
+  .results-empty svg{ width:40px; height:40px; stroke:var(--pink); margin:0 auto 18px; }
+  .results-body{ display:none; }
+  .result-row{ display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:22px 30px; border-bottom:1px solid rgba(255,255,255,0.14); }
+  .result-row .rlabel{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--on-ink-muted); text-transform:uppercase; letter-spacing:.04em; }
+  .result-row .rvalue{ font-family:'Fraunces'; font-size:24px; color:#fff; text-align:right; }
+  .result-row.hero-row{ padding:30px 30px 26px; border-bottom:1px solid rgba(255,255,255,0.14); background:rgba(240,73,156,0.08); }
+  .result-row.hero-row .rlabel{ color:var(--pink); font-size:13px; }
+  .result-row.hero-row .rvalue{ font-size:38px; }
+  .result-source{ padding:18px 30px 26px; font-size:12px; color:var(--on-ink-muted); font-family:'JetBrains Mono', monospace; }
+  .results-cta{ padding:0 30px 30px; display:flex; gap:12px; flex-wrap:wrap; }
+
+  .lh-box{ border:1px solid var(--line); background:var(--panel); padding:30px 32px; display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+  .lh-box .lh-icon{ width:50px; height:50px; flex-shrink:0; }
+  .lh-box .lh-icon svg{ width:100%; height:100%; }
+  .lh-box h3{ font-size:18px; margin-bottom:4px; }
+  .lh-box p{ font-size:14.5px; color:var(--muted); max-width:480px; }
+</style>
+</head>
+<body>
+
+<!-- ===================== NAV ===================== -->
+<header>
+  <div class="wrap">
+    <nav>
+      <a href="index.html" class="brand"><img src="assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">Big Oak Technologies</a>
+      <div class="nav-links">
+        <a href="index.html#services">Services</a>
+        <a href="index.html#process">Process</a>
+        <a href="index.html#results">Results</a>
+        <a href="calculator.html">Revenue Calculator</a>
+        <a href="blog/index.html">Blog</a>
+      </div>
+      <div class="nav-cta">
+        <a href="tel:+9740000000" class="btn btn-line btn-sm">Call</a>
+        <a href="https://wa.me/9740000000?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20talk%20about%20growing%20my%20leads." target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.05 4a8.94 8.94 0 0 0-7.75 13.4L3 21l3.72-1.24a8.9 8.9 0 0 0 4.31 1.1h.01a8.94 8.94 0 0 0 6.56-15.54zM12.05 19.4a7.4 7.4 0 0 1-3.78-1.04l-.27-.16-2.24.75.75-2.18-.17-.28a7.44 7.44 0 1 1 13.8-3.9 7.43 7.43 0 0 1-8.09 6.81z"/></svg>
+          WhatsApp
+        </a>
+        <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+  <div class="mobile-menu">
+    <a href="index.html#services">Services</a>
+    <a href="index.html#process">Process</a>
+    <a href="index.html#results">Results</a>
+    <a href="calculator.html">Revenue Calculator</a>
+    <a href="blog/index.html">Blog</a>
+  </div>
+</header>
+
+<!-- ===================== PAGE HEADER ===================== -->
+<section class="page-header">
+  <div class="wrap">
+    <div class="breadcrumb"><a href="index.html">Home</a> / Revenue Calculator</div>
+    <span class="eyebrow on-ink">Free tool · 30 seconds</span>
+    <h1>How much revenue is your website losing right now?</h1>
+    <p>Enter three numbers. We'll show you what your site is likely converting today versus what a conversion-optimized funnel could recover — in real currency, not vague percentages.</p>
+  </div>
+</section>
+
+<!-- ===================== CALCULATOR ===================== -->
+<section>
+  <div class="wrap">
+    <div class="calc-grid">
+
+      <div class="calc-panel reveal">
+        <h3>Run your numbers</h3>
+        <p class="hint">No spam — this just opens your results below.</p>
+        <form id="calcForm">
+          <div class="field-row">
+            <label for="calcEmail">Work email</label>
+            <input type="email" id="calcEmail" required placeholder="you@company.com">
+          </div>
+          <div class="field-row">
+            <label for="calcVisits">Website monthly visits</label>
+            <input type="number" id="calcVisits" min="1" required placeholder="e.g. 4000">
+          </div>
+          <div class="field-row">
+            <label for="calcSale">Average sale value (QR)</label>
+            <input type="number" id="calcSale" min="1" required placeholder="e.g. 350">
+          </div>
+          <div class="field-row">
+            <label for="calcRate">Current conversion rate <span class="optional">— optional</span></label>
+            <input type="number" id="calcRate" min="0" max="100" step="0.1" placeholder="e.g. 1.5">
+            <div class="field-note" id="calcRateHint">Leave blank to use the industry average (1.8%).</div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Calculate My Revenue Gap</button>
+          <div id="calcStatus"></div>
+        </form>
+      </div>
+
+      <div class="results-panel reveal">
+        <div class="results-empty" id="calcEmpty">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M3 3v18h18M7 14l4-4 4 4 5-6"/></svg>
+          <p>Your results will appear here once you run the numbers.</p>
+        </div>
+        <div class="results-body" id="calcResults">
+          <div class="result-row"><span class="rlabel">Est. current monthly revenue</span><span class="rvalue" id="rCurrentRevenue">QR 0</span></div>
+          <div class="result-row"><span class="rlabel">Potential monthly revenue</span><span class="rvalue" id="rPotentialRevenue">QR 0</span></div>
+          <div class="result-row"><span class="rlabel">Current rate used</span><span class="rvalue" id="rCurrentRate" style="font-size:16px;">—</span></div>
+          <div class="result-row"><span class="rlabel">Target rate (optimized funnel)</span><span class="rvalue" id="rTargetRate" style="font-size:16px;">—</span></div>
+          <div class="result-row"><span class="rlabel">Revenue left on the table / month</span><span class="rvalue" id="rMonthlyGap">QR 0</span></div>
+          <div class="result-row hero-row"><span class="rlabel">Annual revenue gap</span><span class="rvalue" id="rAnnualGap">QR 0</span></div>
+          <div class="result-source" id="rSourceNote"></div>
+          <div class="results-cta">
+            <a href="#lead-form-calc" class="btn btn-primary">Close This Gap — Book a Call</a>
+            <a href="https://wa.me/9740000000" id="calcWaBtn" target="_blank" rel="noopener" class="btn btn-line on-ink" style="display:none;">Send Me These Numbers on WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================== GOOGLE LIGHTHOUSE ===================== -->
+<section>
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Check the technical side</span>
+      <h2>Revenue is only half the picture</h2>
+      <p>Slow load times and poor mobile performance quietly kill conversion before a visitor ever sees your offer. Run your current site through Google's own Lighthouse audit for an objective, technical read.</p>
+    </div>
+    <div class="lh-box reveal">
+      <div class="lh-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--magenta)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/><path d="M12 3v2M21 12h-2M12 19v2M5 12H3"/></svg>
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <h3>Run a free Google Lighthouse audit</h3>
+        <p>Google's PageSpeed Insights tool runs a real Lighthouse audit on your live site and scores performance, accessibility, and SEO in about 20 seconds — no signup required.</p>
+      </div>
+      <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener" class="btn btn-dark">Open Lighthouse Audit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEAD FORM ===================== -->
+<section id="lead-form-calc">
+  <div class="wrap">
+    <div class="split" style="align-items:start;">
+      <div class="reveal">
+        <span class="eyebrow">Next step</span>
+        <h2>Let's close the gap</h2>
+        <p style="color:var(--muted); font-size:15.5px; margin-bottom:0;">Tell us a bit about your business and we'll come back with a short plan for closing the revenue gap above — no generic pitch decks.</p>
+      </div>
+      <form class="lead-form reveal" id="leadForm">
+        <label for="name">Full name</label>
+        <input type="text" id="name" required placeholder="Jane Doe">
+        <label for="phone">Phone number</label>
+        <input type="tel" id="phone" required placeholder="+974 0000 0000">
+        <label for="service">What do you need?</label>
+        <select id="service">
+          <option>A new website</option>
+          <option>A lead-to-sale funnel</option>
+          <option>Follow-up automation</option>
+          <option>SEO</option>
+          <option>Oak Presence (AI + social)</option>
+          <option>Not sure yet</option>
+        </select>
+        <label for="msg">Anything else?</label>
+        <input type="text" id="msg" placeholder="Optional">
+        <button type="submit" class="btn btn-primary btn-full">Send &amp; Continue on WhatsApp</button>
+        <div class="form-status" id="formStatus">Thanks! Opening WhatsApp with your details...</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><img src="assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">Big Oak Technologies</div>
+        <p style="font-size:14px; max-width:280px;">Websites and growth systems that turn traffic into leads and leads into sales — plus AI-powered presence and certified developer training.</p>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <ul>
+          <li><a href="index.html#services">Services</a></li>
+          <li><a href="index.html#process">Process</a></li>
+          <li><a href="index.html#results">Results</a></li>
+          <li><a href="blog/index.html">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Programs</h5>
+        <ul>
+          <li><a href="index.html#presence">Oak Presence</a></li>
+          <li><a href="index.html#academy">Oak Academy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="tel:+9740000000">+974 0000 0000</a></li>
+          <li><a href="https://wa.me/9740000000" target="_blank" rel="noopener">WhatsApp</a></li>
+          <li><a href="mailto:hello@bigoaktechnologies.com">hello@bigoaktechnologies.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Big Oak Technologies. All rights reserved.</span>
+      <span>Built to convert.</span>
+    </div>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/9740000000?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20chat." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.6 6.32A8.86 8.86 0 0 0 12.05 4a8.94 8.94 0 0 0-7.75 13.4L3 21l3.72-1.24a8.9 8.9 0 0 0 4.31 1.1h.01a8.94 8.94 0 0 0 6.56-15.54zM12.05 19.4a7.4 7.4 0 0 1-3.78-1.04l-.27-.16-2.24.75.75-2.18-.17-.28a7.44 7.44 0 1 1 13.8-3.9 7.43 7.43 0 0 1-8.09 6.81zm4.08-5.56c-.22-.11-1.31-.65-1.51-.72-.2-.07-.35-.11-.5.11-.15.22-.57.72-.7.87-.13.15-.26.16-.48.05a6.1 6.1 0 0 1-1.79-1.1 6.7 6.7 0 0 1-1.24-1.54c-.13-.22 0-.34.1-.45.1-.1.22-.26.33-.39.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.39-.06-.11-.5-1.2-.68-1.65-.18-.43-.36-.37-.5-.38h-.43c-.15 0-.39.06-.6.28-.2.22-.79.77-.79 1.87s.81 2.17.92 2.32c.11.15 1.6 2.44 3.87 3.42a13 13 0 0 0 1.29.48c.54.17 1.03.15 1.42.09.43-.06 1.31-.54 1.5-1.06.18-.52.18-.96.13-1.06-.06-.1-.2-.16-.42-.27z"/></svg>
+</a>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/calculator.js"></script>
+</body>
+</html>
