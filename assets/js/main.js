@@ -46,11 +46,11 @@ document.addEventListener('DOMContentLoaded', function () {
       var msg = (document.getElementById('msg') || {}).value || '';
 
       var text = 'Hi Big Oak Technologies, my name is ' + name.trim() + '.'
-        + '%0APhone: ' + phone.trim()
-        + '%0AInterested in: ' + service
-        + '%0ANotes: ' + (msg.trim() || 'N/A');
+        + '\nPhone: ' + phone.trim()
+        + '\nInterested in: ' + service
+        + '\nNotes: ' + (msg.trim() || 'N/A');
 
-      var waLink = 'https://wa.me/9740000000?text=' + text;
+      var waLink = 'https://wa.me/97444455566?text=' + encodeURIComponent(text);
 
       if (status) status.style.display = 'block';
       window.open(waLink, '_blank');

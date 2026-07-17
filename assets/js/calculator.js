@@ -90,7 +90,7 @@
     var annualGap = monthlyGap * 12;
 
     // Populate results
-    document.getElementById('rCurrentRate').textContent = currentRateDec === BASELINE_RATE ? (currentRate.toFixed(1) + '% (industry avg.)') : (currentRate.toFixed(1) + '%');
+    document.getElementById('rCurrentRate').textContent = usingDefaultRate ? (currentRate.toFixed(1) + '% (industry avg.)') : (currentRate.toFixed(1) + '%');
     document.getElementById('rTargetRate').textContent = (targetRateDec * 100).toFixed(1) + '%';
 
     animateValue(document.getElementById('rCurrentRevenue'), currentMonthlyRevenue, 'QR ', '', 900);
@@ -109,14 +109,14 @@
     // Fire-and-forget WhatsApp handoff with the lead's numbers so the
     // sales team can follow up with context already in hand.
     var waText = 'Hi Big Oak Technologies, I just ran the revenue calculator.'
-      + '%0AEmail: ' + email
-      + '%0AMonthly visits: ' + Math.round(visits)
-      + '%0AAvg sale value: QR ' + Math.round(avgSale)
-      + '%0AEstimated annual revenue left on the table: QR ' + Math.round(annualGap).toLocaleString();
+      + '\nEmail: ' + email
+      + '\nMonthly visits: ' + Math.round(visits)
+      + '\nAvg sale value: QR ' + Math.round(avgSale)
+      + '\nEstimated annual revenue left on the table: QR ' + formatNumber(annualGap);
 
     var waBtn = document.getElementById('calcWaBtn');
     if (waBtn) {
-      waBtn.href = 'https://wa.me/9740000000?text=' + waText;
+      waBtn.href = 'https://wa.me/97444455566?text=' + encodeURIComponent(waText);
       waBtn.style.display = 'inline-flex';
     }
   });
