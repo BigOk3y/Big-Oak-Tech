@@ -99,8 +99,8 @@
     animateValue(document.getElementById('rAnnualGap'), annualGap, 'QR ', '', 1300);
 
     document.getElementById('rSourceNote').textContent = usingDefaultRate
-      ? 'Based on an industry-average conversion rate of ' + (BASELINE_RATE * 100).toFixed(1) + '% since you didn\u2019t enter your own.'
-      : 'Based on the conversion rate you entered.';
+      ? 'Based on an industry-average visitor-to-customer rate of ' + (BASELINE_RATE * 100).toFixed(1) + '% since you didn\u2019t enter your own.'
+      : 'Based on the rate you entered.';
 
     if (emptyEl) emptyEl.style.display = 'none';
     resultsEl.style.display = 'block';

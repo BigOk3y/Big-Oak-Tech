@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Revenue Leak Calculator — Big Oak Technologies</title>
-<meta name="description" content="See how much revenue your website is currently losing, and what a conversion-optimized funnel could recover. Free, instant, no obligation.">
+<title>Free Website Calculator — Big Oak Technologies</title>
+<meta name="description" content="See how much money your website could be making with a better design. Free, instant, no obligation.">
 <link rel="icon" href="assets/img/bigoaklogo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <style>
   /* ---- Calculator-page-only styles ---- */
@@ -30,7 +30,7 @@
   .results-body{ display:none; }
   .result-row{ display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:22px 30px; border-bottom:1px solid rgba(255,255,255,0.14); }
   .result-row .rlabel{ font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--on-ink-muted); text-transform:uppercase; letter-spacing:.04em; }
-  .result-row .rvalue{ font-family:'Fraunces'; font-size:24px; color:#fff; text-align:right; }
+  .result-row .rvalue{ font-family:'JetBrains Mono', monospace; font-size:22px; color:#fff; text-align:right; font-weight:600; }
   .result-row.hero-row{ padding:30px 30px 26px; border-bottom:1px solid rgba(255,255,255,0.14); background:rgba(240,73,156,0.08); }
   .result-row.hero-row .rlabel{ color:var(--pink); font-size:13px; }
   .result-row.hero-row .rvalue{ font-size:38px; }
@@ -55,7 +55,7 @@
         <a href="index.html#services">Services</a>
         <a href="index.html#process">Process</a>
         <a href="index.html#results">Results</a>
-        <a href="calculator.html">Revenue Calculator</a>
+        <a href="calculator.html">Free Calculator</a>
         <a href="blog/index.html">Blog</a>
       </div>
       <div class="nav-cta">
@@ -74,7 +74,7 @@
     <a href="index.html#services">Services</a>
     <a href="index.html#process">Process</a>
     <a href="index.html#results">Results</a>
-    <a href="calculator.html">Revenue Calculator</a>
+    <a href="calculator.html">Free Calculator</a>
     <a href="blog/index.html">Blog</a>
   </div>
 </header>
@@ -82,10 +82,10 @@
 <!-- ===================== PAGE HEADER ===================== -->
 <section class="page-header">
   <div class="wrap">
-    <div class="breadcrumb"><a href="index.html">Home</a> / Revenue Calculator</div>
+    <div class="breadcrumb"><a href="index.html">Home</a> / Free Calculator</div>
     <span class="eyebrow on-ink">Free tool · 30 seconds</span>
-    <h1>How much revenue is your website losing right now?</h1>
-    <p>Enter three numbers. We'll show you what your site is likely converting today versus what a conversion-optimized funnel could recover — in real currency, not vague percentages.</p>
+    <h1>Is your website costing you customers?</h1>
+    <p>Enter a few details below and we'll estimate how much money your business could be making with a better website.</p>
   </div>
 </section>
 
@@ -111,11 +111,11 @@
             <input type="number" id="calcSale" min="1" required placeholder="e.g. 350">
           </div>
           <div class="field-row">
-            <label for="calcRate">Current conversion rate <span class="optional">— optional</span></label>
+            <label for="calcRate">Current visitor-to-customer rate <span class="optional">— optional</span></label>
             <input type="number" id="calcRate" min="0" max="100" step="0.1" placeholder="e.g. 1.5">
             <div class="field-note" id="calcRateHint">Leave blank to use the industry average (1.8%).</div>
           </div>
-          <button type="submit" class="btn btn-primary btn-full">Calculate My Revenue Gap</button>
+          <button type="submit" class="btn btn-primary btn-full">Show Me My Results</button>
           <div id="calcStatus"></div>
         </form>
       </div>
@@ -126,15 +126,15 @@
           <p>Your results will appear here once you run the numbers.</p>
         </div>
         <div class="results-body" id="calcResults">
-          <div class="result-row"><span class="rlabel">Est. current monthly revenue</span><span class="rvalue" id="rCurrentRevenue">QR 0</span></div>
-          <div class="result-row"><span class="rlabel">Potential monthly revenue</span><span class="rvalue" id="rPotentialRevenue">QR 0</span></div>
+          <div class="result-row"><span class="rlabel">What you're likely making now (monthly)</span><span class="rvalue" id="rCurrentRevenue">QR 0</span></div>
+          <div class="result-row"><span class="rlabel">What you could be making (monthly)</span><span class="rvalue" id="rPotentialRevenue">QR 0</span></div>
           <div class="result-row"><span class="rlabel">Current rate used</span><span class="rvalue" id="rCurrentRate" style="font-size:16px;">—</span></div>
-          <div class="result-row"><span class="rlabel">Target rate (optimized funnel)</span><span class="rvalue" id="rTargetRate" style="font-size:16px;">—</span></div>
-          <div class="result-row"><span class="rlabel">Revenue left on the table / month</span><span class="rvalue" id="rMonthlyGap">QR 0</span></div>
-          <div class="result-row hero-row"><span class="rlabel">Annual revenue gap</span><span class="rvalue" id="rAnnualGap">QR 0</span></div>
+          <div class="result-row"><span class="rlabel">Target rate (with a better website)</span><span class="rvalue" id="rTargetRate" style="font-size:16px;">—</span></div>
+          <div class="result-row"><span class="rlabel">Extra money you could gain / month</span><span class="rvalue" id="rMonthlyGap">QR 0</span></div>
+          <div class="result-row hero-row"><span class="rlabel">Extra money you could gain / year</span><span class="rvalue" id="rAnnualGap">QR 0</span></div>
           <div class="result-source" id="rSourceNote"></div>
           <div class="results-cta">
-            <a href="#lead-form-calc" class="btn btn-primary">Close This Gap — Book a Call</a>
+            <a href="#lead-form-calc" class="btn btn-primary">Book a Free Call</a>
             <a href="https://wa.me/97444455566" id="calcWaBtn" target="_blank" rel="noopener" class="btn btn-line on-ink" style="display:none;">Send Me These Numbers on WhatsApp</a>
           </div>
         </div>
@@ -149,8 +149,8 @@
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Check the technical side</span>
-      <h2>Revenue is only half the picture</h2>
-      <p>Slow load times and poor mobile performance quietly kill conversion before a visitor ever sees your offer. Run your current site through Google's own Lighthouse audit for an objective, technical read.</p>
+      <h2>Money isn't the only thing to check</h2>
+      <p>Slow load times and poor mobile performance quietly lose you customers before they even see your offer. Run your current site through Google's own Lighthouse audit for an honest, technical read.</p>
     </div>
     <div class="lh-box reveal">
       <div class="lh-icon">
@@ -171,8 +171,8 @@
     <div class="split" style="align-items:start;">
       <div class="reveal">
         <span class="eyebrow">Next step</span>
-        <h2>Let's close the gap</h2>
-        <p style="color:var(--muted); font-size:15.5px; margin-bottom:0;">Tell us a bit about your business and we'll come back with a short plan for closing the revenue gap above — no generic pitch decks.</p>
+        <h2>Let's talk about your business</h2>
+        <p style="color:var(--muted); font-size:15.5px; margin-bottom:0;">Tell us a bit about your business and we'll come back with a short, honest plan — no generic pitch decks.</p>
       </div>
       <form class="lead-form reveal" id="leadForm">
         <label for="name">Full name</label>
@@ -182,8 +182,8 @@
         <label for="service">What do you need?</label>
         <select id="service">
           <option>A new website</option>
-          <option>A lead-to-sale funnel</option>
-          <option>Follow-up automation</option>
+          <option>A sales funnel</option>
+          <option>Automatic follow-up</option>
           <option>SEO</option>
           <option>Oak Presence (AI + social)</option>
           <option>Not sure yet</option>
@@ -203,7 +203,7 @@
     <div class="footer-grid">
       <div>
         <div class="footer-brand"><img src="assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">Big Oak Technologies</div>
-        <p style="font-size:14px; max-width:280px;">Websites and growth systems that turn traffic into leads and leads into sales — plus AI-powered presence and certified developer training.</p>
+        <p style="font-size:14px; max-width:280px;">Websites, SEO, AI marketing, and automatic follow-up that help businesses get more leads, more sales, and grow faster.</p>
       </div>
       <div>
         <h5>Company</h5>
@@ -219,6 +219,7 @@
         <ul>
           <li><a href="index.html#presence">Oak Presence</a></li>
           <li><a href="index.html#academy">Oak Academy</a></li>
+          <li><a href="calculator.html">Free Calculator</a></li>
         </ul>
       </div>
       <div>
@@ -232,7 +233,7 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 Big Oak Technologies. All rights reserved.</span>
-      <span>Built to convert.</span>
+      <span>Built to help you grow.</span>
     </div>
   </div>
 </footer>
