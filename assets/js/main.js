@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
         + '\nInterested in: ' + service
         + '\nNotes: ' + (msg.trim() || 'N/A');
 
-      var waLink = 'https://wa.me/97444455566?text=' + encodeURIComponent(text);
+      var waLink = 'https://wa.me/97474089629?text=' + encodeURIComponent(text);
 
       if (status) status.style.display = 'block';
       window.open(waLink, '_blank');

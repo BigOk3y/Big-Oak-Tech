@@ -116,7 +116,7 @@
 
     var waBtn = document.getElementById('calcWaBtn');
     if (waBtn) {
-      waBtn.href = 'https://wa.me/97444455566?text=' + encodeURIComponent(waText);
+      waBtn.href = 'https://wa.me/97474089629?text=' + encodeURIComponent(waText);
       waBtn.style.display = 'inline-flex';
     }
   });
