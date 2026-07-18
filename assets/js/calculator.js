@@ -1,5 +1,5 @@
 // ============================================================
-// BIG OAK TECHNOLOGIES — Revenue Leak Calculator
+// BIG OAK TECHNOLOGIES: Free Website Calculator
 // Pure vanilla JS. No dependencies, no network calls.
 // ============================================================
 
@@ -76,8 +76,8 @@
     if (usingDefaultRate) currentRate = BASELINE_RATE * 100;
 
     var currentRateDec = currentRate / 100;
-    // A visitor's site can't out-convert the optimized benchmark in this model —
-    // if they're already above it, use their own rate as the floor for "current".
+    // A visitor's site can't out-convert the optimized benchmark in this model.
+    // If they're already above it, use their own rate as the floor for "current".
     var targetRateDec = Math.max(OPTIMIZED_RATE, currentRateDec + 0.02);
 
     var currentMonthlySales = visits * currentRateDec;

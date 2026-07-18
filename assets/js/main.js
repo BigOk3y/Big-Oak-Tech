@@ -1,5 +1,5 @@
 // ============================================================
-// BIG OAK TECHNOLOGIES — shared site behavior (vanilla JS, no deps)
+// BIG OAK TECHNOLOGIES: shared site behavior (vanilla JS, no deps)
 // ============================================================
 
 document.addEventListener('DOMContentLoaded', function () {
