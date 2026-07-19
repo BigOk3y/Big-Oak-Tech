@@ -89,9 +89,9 @@ header{
   background:rgba(255,255,255,0.92); backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line-soft);
 }
-nav{ display:flex; align-items:center; justify-content:space-between; padding:16px 0; gap:16px; }
-.brand{ display:flex; align-items:center; gap:10px; font-family:'Manrope', sans-serif; font-weight:700; font-size:14px; color:var(--ink); flex-shrink:0; min-width:0; }
-.brand img{ height:48px; width:auto; flex-shrink:0; }
+nav{ display:flex; align-items:center; justify-content:space-between; padding-top:10px; padding-bottom:5px; gap:16px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family:'Manrope', sans-serif; font-weight:700; font-size:14px; color:var(--ink); flex-shrink:0; min-width:0;  }
+.brand img{ height:75px; width:auto; flex-shrink:0; }
 .brand-name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .nav-links{ display:flex; gap:30px; align-items:center; }
 .nav-links a{ font-size:14px; font-weight:500; color:var(--ink-2); transition:color .15s; white-space:nowrap; }
@@ -117,7 +117,7 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:16
 }
 @media(max-width:400px){
   .brand-name{ display:none; }
-  .brand img{ height:40px; }
+  .brand img{ height:52px; }
 }
 
 .mobile-menu{
