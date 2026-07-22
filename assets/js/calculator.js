@@ -11,10 +11,19 @@
   var emptyEl     = document.getElementById('calcEmpty');
   var statusEl    = document.getElementById('calcStatus');
 
-  var visitsInput = document.getElementById('calcVisits');
-  var saleInput   = document.getElementById('calcSale');
-  var rateInput   = document.getElementById('calcRate');
-  var emailInput  = document.getElementById('calcEmail');
+  var visitsInput    = document.getElementById('calcVisits');
+  var saleInput       = document.getElementById('calcSale');
+  var rateInput       = document.getElementById('calcRate');
+  var emailInput      = document.getElementById('calcEmail');
+  var currencySelect  = document.getElementById('calcCurrency');
+
+  // Symbol shown before each amount. This only changes how numbers are
+  // labeled, not their value; the visitor enters their sale value in
+  // whichever currency they pick, so no exchange-rate conversion is needed.
+  var CURRENCY_SYMBOLS = {
+    USD: '$', GBP: '\u00A3', EUR: '\u20AC', NGN: '\u20A6', QAR: 'QR',
+    AED: 'AED', SAR: 'SAR', INR: '\u20B9', CAD: 'C$', AUD: 'A$', KES: 'KSh', ZAR: 'R'
+  };
 
   // Industry-benchmark conversion rates used when the user has no
   // rate of their own. Conservative, source-able numbers rather than
@@ -24,9 +33,13 @@
   var BASELINE_RATE = 0.018;
   var OPTIMIZED_RATE = 0.045;
 
-  function formatCurrency(n) {
-    n = Math.round(n);
-    return 'QR ' + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  // Remembers the last computed figures so switching currency after
+  // results are shown just relabels them instantly, no resubmit needed.
+  var lastResult = null;
+
+  function currentSymbol() {
+    var code = currencySelect ? currencySelect.value : 'USD';
+    return CURRENCY_SYMBOLS[code] || code || '$';
   }
 
   function formatNumber(n) {
@@ -54,6 +67,40 @@
       else el.textContent = prefix + formatNumber(end) + suffix;
     }
     requestAnimationFrame(step);
+  }
+
+  function renderResults(animate) {
+    if (!lastResult) return;
+    var symbol = currentSymbol();
+    var prefix = symbol + ' ';
+
+    document.getElementById('rCurrentRate').textContent = lastResult.rateLabel;
+    document.getElementById('rTargetRate').textContent = lastResult.targetRateLabel;
+
+    if (animate) {
+      animateValue(document.getElementById('rCurrentRevenue'), lastResult.currentMonthlyRevenue, prefix, '', 900);
+      animateValue(document.getElementById('rPotentialRevenue'), lastResult.potentialMonthlyRevenue, prefix, '', 900);
+      animateValue(document.getElementById('rMonthlyGap'), lastResult.monthlyGap, prefix, '', 1100);
+      animateValue(document.getElementById('rAnnualGap'), lastResult.annualGap, prefix, '', 1300);
+    } else {
+      document.getElementById('rCurrentRevenue').textContent = prefix + formatNumber(lastResult.currentMonthlyRevenue);
+      document.getElementById('rPotentialRevenue').textContent = prefix + formatNumber(lastResult.potentialMonthlyRevenue);
+      document.getElementById('rMonthlyGap').textContent = prefix + formatNumber(lastResult.monthlyGap);
+      document.getElementById('rAnnualGap').textContent = prefix + formatNumber(lastResult.annualGap);
+    }
+
+    document.getElementById('rSourceNote').textContent = lastResult.sourceNote;
+
+    var waBtn = document.getElementById('calcWaBtn');
+    if (waBtn) {
+      var waText = 'Hi Big Oak Technologies, I just ran the revenue calculator.'
+        + '\nEmail: ' + lastResult.email
+        + '\nMonthly visits: ' + Math.round(lastResult.visits)
+        + '\nAvg sale value: ' + symbol + ' ' + Math.round(lastResult.avgSale)
+        + '\nEstimated annual revenue left on the table: ' + symbol + ' ' + formatNumber(lastResult.annualGap);
+      waBtn.href = 'https://wa.me/97474089629?text=' + encodeURIComponent(waText);
+      waBtn.style.display = 'inline-flex';
+    }
   }
 
   form.addEventListener('submit', function (e) {
@@ -89,37 +136,37 @@
     var monthlyGap = Math.max(potentialMonthlyRevenue - currentMonthlyRevenue, 0);
     var annualGap = monthlyGap * 12;
 
-    // Populate results
-    document.getElementById('rCurrentRate').textContent = usingDefaultRate ? (currentRate.toFixed(1) + '% (industry avg.)') : (currentRate.toFixed(1) + '%');
-    document.getElementById('rTargetRate').textContent = (targetRateDec * 100).toFixed(1) + '%';
-
-    animateValue(document.getElementById('rCurrentRevenue'), currentMonthlyRevenue, 'QR ', '', 900);
-    animateValue(document.getElementById('rPotentialRevenue'), potentialMonthlyRevenue, 'QR ', '', 900);
-    animateValue(document.getElementById('rMonthlyGap'), monthlyGap, 'QR ', '', 1100);
-    animateValue(document.getElementById('rAnnualGap'), annualGap, 'QR ', '', 1300);
-
-    document.getElementById('rSourceNote').textContent = usingDefaultRate
-      ? 'Based on an industry-average visitor-to-customer rate of ' + (BASELINE_RATE * 100).toFixed(1) + '% since you didn\u2019t enter your own.'
-      : 'Based on the rate you entered.';
+    lastResult = {
+      visits: visits,
+      avgSale: avgSale,
+      email: email,
+      currentMonthlyRevenue: currentMonthlyRevenue,
+      potentialMonthlyRevenue: potentialMonthlyRevenue,
+      monthlyGap: monthlyGap,
+      annualGap: annualGap,
+      rateLabel: usingDefaultRate ? (currentRate.toFixed(1) + '% (industry avg.)') : (currentRate.toFixed(1) + '%'),
+      targetRateLabel: (targetRateDec * 100).toFixed(1) + '%',
+      sourceNote: usingDefaultRate
+        ? 'Based on an industry-average visitor-to-customer rate of ' + (BASELINE_RATE * 100).toFixed(1) + '% since you didn\u2019t enter your own.'
+        : 'Based on the rate you entered.'
+    };
 
     if (emptyEl) emptyEl.style.display = 'none';
     resultsEl.style.display = 'block';
     resultsEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Fire-and-forget WhatsApp handoff with the lead's numbers so the
-    // sales team can follow up with context already in hand.
-    var waText = 'Hi Big Oak Technologies, I just ran the revenue calculator.'
-      + '\nEmail: ' + email
-      + '\nMonthly visits: ' + Math.round(visits)
-      + '\nAvg sale value: QR ' + Math.round(avgSale)
-      + '\nEstimated annual revenue left on the table: QR ' + formatNumber(annualGap);
-
-    var waBtn = document.getElementById('calcWaBtn');
-    if (waBtn) {
-      waBtn.href = 'https://wa.me/97474089629?text=' + encodeURIComponent(waText);
-      waBtn.style.display = 'inline-flex';
-    }
+    renderResults(true);
   });
+
+  // Switching currency after results are shown just relabels the same
+  // numbers instantly, no need to resubmit the form.
+  if (currencySelect) {
+    currencySelect.addEventListener('change', function () {
+      if (lastResult && resultsEl.style.display === 'block') {
+        renderResults(false);
+      }
+    });
+  }
 
   // Live-update the little conversion-rate hint as the user types
   if (rateInput) {
