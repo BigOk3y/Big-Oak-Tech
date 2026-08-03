@@ -57,47 +57,23 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ---- Hero core: mouse-follow tilt, touch support, click burst ----
-  var heroVisual = document.querySelector('.hero-visual');
-  var coreWrap = document.querySelector('.core-wrap');
-  var corePulse = document.querySelector('.core-pulse');
-  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  if (heroVisual && coreWrap && !reduceMotion) {
-    var baseX = 20, baseY = -15, maxTilt = 14;
-
-    function applyTilt(clientX, clientY, hovering) {
-      var rect = heroVisual.getBoundingClientRect();
-      var relX = (clientX - rect.left) / rect.width;
-      var relY = (clientY - rect.top) / rect.height;
-      var tiltY = (relX - 0.5) * maxTilt * 2;
-      var tiltX = (0.5 - relY) * maxTilt * 2;
-      var scale = hovering ? 1.06 : 1;
-      coreWrap.style.transform = 'rotateX(' + (baseX + tiltX) + 'deg) rotateY(' + (baseY + tiltY) + 'deg) scale(' + scale + ')';
-    }
-    function resetTilt() {
-      coreWrap.style.transform = 'rotateX(' + baseX + 'deg) rotateY(' + baseY + 'deg) scale(1)';
-    }
-
-    heroVisual.addEventListener('mousemove', function (e) {
-      applyTilt(e.clientX, e.clientY, true);
-    });
-    heroVisual.addEventListener('mouseleave', resetTilt);
-
-    heroVisual.addEventListener('touchmove', function (e) {
-      if (!e.touches || !e.touches[0]) return;
-      applyTilt(e.touches[0].clientX, e.touches[0].clientY, true);
-    }, { passive: true });
-    heroVisual.addEventListener('touchend', resetTilt);
-
-    heroVisual.addEventListener('click', function () {
-      if (!corePulse) return;
-      corePulse.classList.remove('burst');
-      // force reflow so the animation can restart if clicked again quickly
-      void corePulse.offsetWidth;
-      corePulse.classList.add('burst');
-      setTimeout(function () { corePulse.classList.remove('burst'); }, 650);
-    });
+  // ---- Floating nav: appears once the hero has scrolled out of view ----
+  var heroSection = document.getElementById('heroSection');
+  var floatingNav = document.getElementById('floatingNav');
+  if (heroSection && floatingNav && 'IntersectionObserver' in window) {
+    var navObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          floatingNav.classList.remove('visible');
+          document.body.classList.remove('hero-passed');
+        } else if (entry.boundingClientRect.top < 0) {
+          // Hero has scrolled up and out of view (not "not yet scrolled to").
+          floatingNav.classList.add('visible');
+          document.body.classList.add('hero-passed');
+        }
+      });
+    }, { threshold: 0 });
+    navObserver.observe(heroSection);
   }
 
 });

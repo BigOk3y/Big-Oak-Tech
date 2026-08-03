@@ -28,7 +28,7 @@
 }
 
 *{ box-sizing:border-box; margin:0; padding:0; }
-html{ scroll-behavior:smooth; }
+html{ scroll-behavior:smooth; overflow-x:hidden; }
 body{
   font-family:'Inter', sans-serif;
   color:var(--ink-2);
@@ -36,6 +36,8 @@ body{
   line-height:1.6;
   font-size:16px;
   -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  width:100%;
 }
 img{ max-width:100%; display:block; }
 a{ color:inherit; text-decoration:none; }
@@ -46,6 +48,7 @@ b,strong{ font-weight:600; }
 .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 28px; }
 section{ padding:96px 0; border-bottom:1px solid var(--line-soft); }
 @media(max-width:768px){ section{ padding:64px 0; } .wrap{ padding:0 20px; } }
+@media(max-width:480px){ section{ padding:44px 0; } .wrap{ padding:0 16px; } }
 
 .eyebrow{
   font-family:'Inter', sans-serif;
@@ -78,8 +81,6 @@ section{ padding:96px 0; border-bottom:1px solid var(--line-soft); }
 .btn svg{ width:17px; height:17px; flex-shrink:0; }
 /* Dark backgrounds (hero, final CTA) need an inverted, high-contrast primary button
    rather than a dark-on-dark one. */
-.hero .btn-primary{ background:#fff; color:var(--ink); }
-.hero .btn-primary:hover{ background:#EDEAF6; }
 .academy-hero .btn-primary{ background:#fff; color:var(--ink); }
 .academy-hero .btn-primary:hover{ background:#EDEAF6; }
 .final-cta .btn-dark{ background:#fff; color:var(--ink); }
@@ -90,12 +91,18 @@ header{
   position:sticky; top:0; z-index:100;
   background:rgba(255,255,255,0.92); backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line-soft);
+  transition:opacity .25s ease, transform .25s ease;
 }
-nav{ display:flex; align-items:center; justify-content:space-between; padding:22px 0; gap:24px; }
+@media(min-width:861px){
+  body.hero-passed header{
+    opacity:0; pointer-events:none; transform:translateY(-8px);
+  }
+}
+nav{ display:grid; grid-template-columns:auto 1fr auto; align-items:center; padding:20px 0; gap:24px; }
 .brand{ display:flex; align-items:center; gap:10px; font-family:'Manrope', sans-serif; font-weight:700; font-size:14px; color:var(--ink); flex-shrink:0; min-width:0; }
 .brand img{ height:48px; width:auto; flex-shrink:0; }
 .brand-name{ white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.nav-links{ display:flex; gap:36px; align-items:center; }
+.nav-links{ display:flex; gap:36px; align-items:center; justify-self:center; }
 .nav-links a{
   position:relative; font-size:13px; font-weight:700; color:var(--ink-2);
   text-transform:uppercase; letter-spacing:.04em; transition:color .15s; white-space:nowrap;
@@ -108,7 +115,7 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:22
 }
 .nav-links a:hover{ color:var(--ink); }
 .nav-links a:hover::after{ transform:scaleX(1); }
-.nav-cta{ display:flex; gap:10px; align-items:center; flex-shrink:0; }
+.nav-cta{ display:flex; gap:10px; align-items:center; flex-shrink:0; justify-self:end; }
 .nav-cta .btn svg{ width:16px; height:16px; }
 .menu-toggle{ display:none; background:none; border:none; cursor:pointer; padding:6px; flex-shrink:0; }
 .menu-toggle svg{ width:24px; height:24px; transition:transform .2s ease; }
@@ -117,6 +124,7 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:22
 @media(max-width:900px){
   .nav-links{ display:none; }
   .menu-toggle{ display:block; }
+  nav{ grid-template-columns:auto auto; justify-content:space-between; }
 }
 /* Below this width, drop the Call button from the top bar (it lives in the
    mobile menu instead) and shrink WhatsApp to an icon-only pill so the
@@ -145,144 +153,65 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:22
 .mobile-menu a{ padding:14px 20px; font-size:14.5px; font-weight:500; border-bottom:1px solid var(--line-soft); transition:background .15s, color .15s; }
 .mobile-menu a:hover{ background:var(--panel); color:var(--btn-plum); }
 
-/* ---------- HERO ---------- */
+/* ---------- HERO: plain two-column flex layout (text | image).
+   No absolute positioning, no calc-based offsets — the browser's normal
+   flex layout keeps the image physically confined to its own column,
+   so it cannot overflow or drift regardless of viewport width. ---------- */
 .hero{
-  background:
-    radial-gradient(circle at 82% 45%, rgba(211,28,123,0.08) 0%, rgba(211,28,123,0.02) 38%, transparent 65%),
-    radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px) 0 0/26px 26px,
-    var(--ink);
-  color:#fff; padding:88px 0 68px; border-bottom:none; position:relative; overflow:hidden;
+  position:relative; overflow:hidden;
+  color:var(--ink-2);
+  border-bottom:1px solid var(--line-soft);
+  padding:64px 0;
+  width:100vw
 }
-.hero-grid{ display:grid; grid-template-columns:1.05fr 0.95fr; gap:var(--gap); align-items:center; position:relative; z-index:1; }
-@media(max-width:960px){ .hero-grid{ grid-template-columns:1fr; } }
-.hero h1{ font-size:clamp(34px, 4.8vw, 58px); color:#fff; margin:18px 0 22px; font-weight:700; }
-.hero h1 em{ font-style:italic; color:var(--pink); }
-.hero p.lede{ font-size:18px; color:var(--on-ink); max-width:520px; margin-bottom:32px; }
+.hero-wrap{ display:flex; align-items:center; gap:52px; }
+.hero-content{
+  flex:1 1 460px; max-width:460px; min-width:0;
+  animation:hero-fade-up .7s ease both;
+  width:1400px;
+}
+.hero-media{
+  flex:1 1 0%; min-width:0; align-self:stretch;
+  min-height:420px; max-height:560px;
+  border-radius:2px; overflow:hidden;
+}
+.hero-media img{
+  display:block; width:100%; height:100%;
+  object-fit:contain; object-position:58% center;
+}
+.hero h1{
+  font-size:clamp(28px, 3.6vw, 50px);
+  line-height:1.16;
+  color:var(--ink); margin:18px 0 20px; font-weight:700;
+  overflow-wrap:break-word;
+}
+.hero h1 .accent{ color:var(--btn-plum); }
+.hero p.lede{ font-size:17px; color:var(--btn-plum); max-width:440px; margin-bottom:30px; }
 .hero-cta-row{ display:flex; gap:14px; flex-wrap:wrap; margin-bottom:0; }
+.hero-cta-row .btn{ white-space:normal; text-align:center; }
 
-.hero-content{ animation:hero-fade-up .7s ease both; }
-.hero-visual{ animation:hero-fade-up .9s ease .15s both; }
 @keyframes hero-fade-up{
   from{ opacity:0; transform:translateY(16px); }
   to{ opacity:1; transform:translateY(0); }
 }
 
-/* ---------- HERO VISUAL: ANIMATED GEOMETRIC CORE ---------- */
-.hero-visual{
-  position:relative;
-  display:flex; align-items:center; justify-content:center;
-  min-height:340px; perspective:1000px;
-  cursor:pointer;
+/* Below desktop: stack and drop the image entirely so the hero stays a
+   short, compact text block instead of a tall image-plus-text stack. */
+@media(max-width:900px){
+  .hero{ padding:48px 0; }
+  .hero-wrap{ flex-direction:column; align-items:stretch; gap:0; }
+  .hero-media{ display:none; }
+  .hero-content{ max-width:100%; flex-basis:auto; }
 }
-.core-wrap{
-  position:relative; width:320px; height:320px;
-  transform-style:preserve-3d;
-  transform: rotateX(20deg) rotateY(-15deg);
-  transition:transform .2s ease-out;
-}
-.ring{
-  position:absolute; top:50%; left:50%; border-radius:50%;
-  transform-style:preserve-3d;
-}
-.ring-1{
-  width:320px; height:320px; margin:-160px 0 0 -160px;
-  border:2px solid rgba(255,255,255,0.22);
-  animation: spin-right 16s linear infinite;
-}
-.ring-1::after{
-  content:""; position:absolute; top:-6px; left:50%; margin-left:-6px;
-  width:12px; height:12px; border-radius:50%;
-  background:#fff; opacity:0.6; box-shadow:0 0 14px 4px rgba(255,255,255,0.3);
-}
-.ring-2{
-  width:225px; height:225px; margin:-112.5px 0 0 -112.5px;
-  border:2px dashed rgba(255,255,255,0.32);
-  animation: spin-left 11s linear infinite;
-}
-.ring-2::before{
-  content:""; position:absolute; bottom:-5px; left:50%; margin-left:-5px;
-  width:10px; height:10px; border-radius:50%;
-  background:#fff; opacity:0.85; box-shadow:0 0 12px 4px rgba(255,255,255,0.5);
-}
-.ring-3{
-  width:140px; height:140px; margin:-70px 0 0 -70px;
-  border:2px solid var(--magenta);
-  animation: spin-right 7s linear infinite;
-}
-.ring-3::before{
-  content:""; position:absolute; top:50%; right:-4px; margin-top:-4px;
-  width:8px; height:8px; border-radius:50%;
-  background:var(--pink); box-shadow:0 0 10px 3px rgba(240,73,156,0.5);
-}
-.core-pulse{
-  position:absolute; top:50%; left:50%;
-  width:52px; height:52px; margin:-26px 0 0 -26px;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 30%, var(--pink), var(--magenta));
-  animation: pulse-glow 2.6s ease-in-out infinite;
-}
-.core-pulse.burst{ animation:pulse-burst .6s ease-out; }
-
-/* ---------- HERO PARTICLES ---------- */
-.particle{
-  position:absolute; width:4px; height:4px; border-radius:50%;
-  background:#fff; opacity:0; pointer-events:none;
-  animation:particle-float 6s ease-in infinite;
-}
-.particle.p1{ left:28%; top:74%; animation-delay:0s; }
-.particle.p2{ left:62%; top:78%; animation-delay:1.2s; }
-.particle.p3{ left:46%; top:82%; animation-delay:2.4s; background:var(--pink); opacity:0; }
-.particle.p4{ left:72%; top:68%; animation-delay:3.6s; }
-.particle.p5{ left:20%; top:64%; animation-delay:4.8s; }
-
-@keyframes spin-right{
-  from{ transform:rotateZ(0deg); }
-  to{ transform:rotateZ(360deg); }
-}
-@keyframes spin-left{
-  from{ transform:rotateZ(0deg); }
-  to{ transform:rotateZ(-360deg); }
-}
-@keyframes pulse-glow{
-  0%, 100%{
-    box-shadow:0 0 16px 3px rgba(240,73,156,0.4), 0 0 34px 10px rgba(211,28,123,0.16);
-    transform:scale(1);
-  }
-  50%{
-    box-shadow:0 0 26px 8px rgba(240,73,156,0.6), 0 0 48px 16px rgba(211,28,123,0.28);
-    transform:scale(1.08);
-  }
-}
-@keyframes pulse-burst{
-  0%{ box-shadow:0 0 16px 3px rgba(240,73,156,0.4), 0 0 34px 10px rgba(211,28,123,0.16); transform:scale(1); }
-  40%{ box-shadow:0 0 50px 18px rgba(240,73,156,0.85), 0 0 90px 30px rgba(211,28,123,0.45); transform:scale(1.35); }
-  100%{ box-shadow:0 0 16px 3px rgba(240,73,156,0.4), 0 0 34px 10px rgba(211,28,123,0.16); transform:scale(1); }
-}
-@keyframes particle-float{
-  0%{ opacity:0; transform:translateY(0) scale(0.6); }
-  15%{ opacity:0.75; }
-  80%{ opacity:0.45; }
-  100%{ opacity:0; transform:translateY(-160px) scale(1.1); }
-}
-
-@media(max-width:960px){
-  .core-wrap{ width:260px; height:260px; }
-  .ring-1{ width:260px; height:260px; margin:-130px 0 0 -130px; }
-  .ring-2{ width:185px; height:185px; margin:-92.5px 0 0 -92.5px; }
-  .ring-3{ width:115px; height:115px; margin:-57.5px 0 0 -57.5px; }
-}
-@media(max-width:560px){
-  .hero-visual{ min-height:220px; }
-  .core-wrap{ width:200px; height:200px; }
-  .ring-1{ width:200px; height:200px; margin:-100px 0 0 -100px; }
-  .ring-2{ width:145px; height:145px; margin:-72.5px 0 0 -72.5px; }
-  .ring-3{ width:90px; height:90px; margin:-45px 0 0 -45px; }
-  .core-pulse{ width:40px; height:40px; margin:-20px 0 0 -20px; }
+@media(max-width:600px){
+  .hero{ padding:40px 0 36px; }
+  .hero h1{ font-size:clamp(24px, 7.2vw, 32px); margin:12px 0 14px; }
+  .hero p.lede{ font-size:15px; margin-bottom:22px; }
+  .hero-cta-row{ flex-direction:column; align-items:stretch; gap:10px; }
+  .hero-cta-row .btn{ width:100%; }
 }
 @media (prefers-reduced-motion: reduce){
-  .ring, .core-pulse, .particle{ animation:none; }
-  .hero-content, .hero-visual{ animation:none; opacity:1; transform:none; }
-  .core-wrap{ transform: rotateX(20deg) rotateY(-15deg) !important; }
+  .hero-content{ animation:none; opacity:1; transform:none; }
 }
 
 /* ---------- SIGNATURE: FUNNEL LEDGER ---------- */
@@ -423,6 +352,7 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:22
 
 /* ---------- FINAL CTA ---------- */
 .final-cta{ background:linear-gradient(135deg, var(--ink) 0%, var(--btn-plum) 100%); color:#fff; text-align:center; padding:64px 32px; border:1px solid var(--btn-plum); }
+@media(max-width:480px){ .final-cta{ padding:40px 22px; } }
 .final-cta h2{ font-size:clamp(26px,3.4vw,40px); margin-bottom:14px; color:#fff; }
 .final-cta p{ color:rgba(255,255,255,0.92); max-width:520px; margin:0 auto 30px; font-size:16px; }
 .final-cta .btn-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
@@ -433,7 +363,8 @@ nav{ display:flex; align-items:center; justify-content:space-between; padding:22
 /* ---------- FOOTER ---------- */
 footer{ background:var(--ink); color:var(--on-ink-muted); padding:60px 0 26px; }
 .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; margin-bottom:44px; }
-@media(max-width:768px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+@media(max-width:768px){ .footer-grid{ grid-template-columns:1fr 1fr; gap:32px 24px; } }
+@media(max-width:480px){ .footer-grid{ grid-template-columns:1fr; gap:28px; } }
 .footer-brand{ display:flex; align-items:center; gap:10px; font-family:'Manrope', sans-serif; font-weight:700; color:#fff; font-size:14px; margin-bottom:14px; }
 .footer-brand img{ height:42px; }
 footer h5{ color:#fff; font-size:12.5px; font-family:'Inter', sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; margin-bottom:16px; }
@@ -453,6 +384,7 @@ footer a:hover{ color:var(--on-ink); }
 
 /* ---------- FORMS ---------- */
 .lead-form{ background:var(--paper); border:1px solid var(--line); padding:32px; }
+@media(max-width:480px){ .lead-form{ padding:22px; } }
 .lead-form input, .lead-form select, .lead-form textarea{
   width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid var(--line);
   font-family:'Inter'; font-size:14px; margin-bottom:16px; background:var(--paper); color:var(--ink-2);
@@ -533,6 +465,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .programs-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line-soft); border:1px solid var(--line-soft); }
 @media(max-width:800px){ .programs-grid{ grid-template-columns:1fr; } }
 .program-card{ background:var(--paper); padding:36px; display:flex; flex-direction:column; gap:16px; }
+@media(max-width:480px){ .program-card{ padding:22px; } }
 .program-card .tag{ align-self:flex-start; }
 .program-card h3{ font-size:22px; }
 .program-card p.desc{ font-size:14.5px; color:var(--muted); }
@@ -549,3 +482,29 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .academy-hero h1{ color:#fff; font-size:clamp(32px,4.6vw,52px); margin:18px 0 20px; }
 .academy-hero p.lede{ color:var(--on-ink); font-size:17.5px; max-width:600px; margin:0 auto 32px; }
 .academy-hero .hero-cta-row{ justify-content:center; }
+
+/* ---------- FLOATING NAV (appears once the hero scrolls out of view) ---------- */
+.floating-nav{
+  position:fixed; top:16px; left:50%; z-index:200;
+  display:flex; align-items:center; gap:30px;
+  background:var(--ink); border-radius:999px;
+  padding:10px 30px;
+  box-shadow:0 16px 34px -12px rgba(16,12,41,0.4);
+  opacity:0; pointer-events:none;
+  transform:translate(-50%,-18px);
+  transition:transform .35s ease, opacity .3s ease;
+}
+.floating-nav.visible{ opacity:1; pointer-events:auto; transform:translate(-50%,0); }
+.floating-nav-brand{ display:flex; align-items:center; flex-shrink:0; }
+.floating-nav-brand img{ height:28px; width:auto; display:block; }
+.floating-nav-links{ display:flex; gap:22px; align-items:center; }
+.floating-nav-links a{
+  font-family:'Inter', sans-serif; font-size:12.5px; font-weight:700; text-transform:uppercase;
+  letter-spacing:.04em; color:rgba(255,255,255,0.72); white-space:nowrap; transition:color .15s;
+}
+.floating-nav-links a:hover{ color:#fff; }
+/* A 6-link pill doesn't fit smaller screens; the regular sticky header +
+   hamburger menu already handles mobile nav well, so the floating pill is
+   a desktop-only enhancement. */
+@media(max-width:860px){ .floating-nav{ display:none; } }
+@media (prefers-reduced-motion: reduce){ .floating-nav{ transition:opacity .2s ease; } }
