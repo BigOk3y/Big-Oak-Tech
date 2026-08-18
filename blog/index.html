@@ -5,17 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Blog | Big Oak Technologies</title>
 <meta name="description" content="Practical guides on websites, SEO, and follow-up systems that help businesses get more customers.">
-<link rel="icon" href="../assets/img/bigoaklogo.png">
+<link rel="icon" href="../assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..700;1,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 <body>
 
 <div class="floating-nav" id="floatingNav">
   <a href="../index.html" class="floating-nav-brand">
-    <img src="../assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">
-    <span class="floating-nav-brand-text"><span class="fnb-thin">Big Oak</span><span class="fnb-bold">Technologies</span></span>
+    <img src="../assets/img/logo-white.png" alt="Big Oak Technologies">
   </a>
   <div class="floating-nav-links">
     <a href="../index.html#services">Services</a>
@@ -25,16 +24,53 @@
     <a href="../academy.html">Academy</a>
     <a href="index.html">Blog</a>
   </div>
+  <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20schedule%20a%20call." target="_blank" rel="noopener" class="btn btn-dark btn-sm floating-nav-cta">Schedule a Call</a>
 </div>
 
 
 
-<section class="page-header">
+<section class="interior-hero blog-hero" id="heroSection">
+  <svg class="blog-ring-watermark" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="200" cy="200" r="188" fill="none" stroke="#D7C5FF" stroke-width="1"/>
+    <circle cx="196" cy="204" r="154" fill="none" stroke="#D7C5FF" stroke-width="1"/>
+    <circle cx="204" cy="196" r="118" fill="none" stroke="#D7C5FF" stroke-width="1"/>
+    <circle cx="200" cy="200" r="80" fill="none" stroke="#D7C5FF" stroke-width="1"/>
+    <circle cx="200" cy="200" r="44" fill="none" stroke="#D7C5FF" stroke-width="1.4"/>
+  </svg>
+  <div class="top-nav">
+    <a href="../index.html" class="top-nav-logo"><img src="../assets/img/logo-white.png" alt="Big Oak Technologies"></a>
+    <div class="top-nav-menu">
+      <a href="../index.html#services">Services</a>
+      <a href="../index.html#process">Process</a>
+      <a href="../index.html#results">Results</a>
+      <a href="../calculator.html">Free Calculator</a>
+      <a href="../academy.html">Academy</a>
+      <a href="index.html">Blog</a>
+    </div>
+    <div class="top-nav-cta">
+      <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20schedule%20a%20call." target="_blank" rel="noopener" class="btn btn-dark btn-sm"><span class="btn-label">Schedule a Call</span></a>
+      <button class="top-nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="top-nav-mobile-menu">
+    <div class="top-nav-mobile-menu-actions">
+      <a href="tel:+97474089629" class="btn btn-line on-ink btn-sm">Call Us</a>
+      <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20talk%20about%20growing%20my%20leads." target="_blank" rel="noopener" class="btn btn-dark btn-sm">WhatsApp</a>
+    </div>
+    <a href="../index.html#services">Services</a>
+    <a href="../index.html#process">Process</a>
+    <a href="../index.html#results">Results</a>
+    <a href="../calculator.html">Free Calculator</a>
+    <a href="../academy.html">Academy</a>
+    <a href="index.html">Blog</a>
+  </div>
   <div class="wrap">
-    <div class="breadcrumb"><a href="../index.html">Home</a> / Blog</div>
-    <span class="eyebrow on-ink">The Big Oak Blog</span>
+    <div class="breadcrumb"><a href="../index.html">Home</a> &rsaquo; Blog</div>
+    <span class="eyebrow on-ink">The Oak Journal</span>
     <h1>Notes on websites, marketing, and growth</h1>
-    <p>Practical, no-fluff writing on what actually moves traffic, leads, and sales for businesses in Qatar.</p>
+    <p class="lede">Practical, no-fluff writing on what actually moves traffic, leads, and sales for businesses in Qatar.</p>
   </div>
 </section>
 
@@ -50,7 +86,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <div class="footer-brand"><img src="../assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">Big Oak Technologies</div>
+        <div class="footer-brand"><img src="../assets/img/logo-black.png" alt="Big Oak Technologies"></div>
         <p style="font-size:14px; max-width:280px;">Websites, SEO, and follow-up systems that help businesses get more customers.</p>
       </div>
       <div>
@@ -126,10 +162,10 @@
         card.href = 'posts/' + p.slug + '.html';
         card.className = 'blog-card reveal in';
         card.innerHTML =
-          '<div class="blog-meta"><span>' + p.category + '</span><span>·</span><span>' + formatDate(p.date) + '</span><span>·</span><span>' + p.readMins + ' min read</span></div>' +
+          '<div class="blog-meta"><span>' + p.category + '</span><span>' + formatDate(p.date) + '</span><span>' + p.readMins + ' min read</span></div>' +
           '<h3>' + p.title + '</h3>' +
           '<p>' + p.excerpt + '</p>' +
-          '<span class="read-more">Read the post →</span>';
+          '<span class="read-more">Read the post &rarr;</span>';
         grid.appendChild(card);
       });
     }

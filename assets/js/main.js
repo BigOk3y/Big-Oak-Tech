@@ -5,8 +5,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
   // ---- Mobile menu toggle ----
-  var toggle = document.querySelector('.menu-toggle');
-  var mobileMenu = document.querySelector('.mobile-menu');
+  var toggle = document.querySelector('.top-nav-toggle');
+  var mobileMenu = document.querySelector('.top-nav-mobile-menu');
   if (toggle && mobileMenu) {
     toggle.addEventListener('click', function () {
       mobileMenu.classList.toggle('open');

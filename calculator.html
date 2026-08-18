@@ -14,68 +14,25 @@
 <meta property="og:title" content="Free Website Calculator | Big Oak Technologies">
 <meta property="og:description" content="See how much money your website could be making with a better design. Free, instant, no obligation.">
 <meta property="og:url" content="https://www.bigoaktechnologies.com/calculator.html">
-<meta property="og:image" content="https://www.bigoaktechnologies.com/assets/img/bigoaklogo.png">
+<meta property="og:image" content="https://www.bigoaktechnologies.com/assets/img/logo-black-on-white.png">
 <meta property="og:locale" content="en_US">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Free Website Calculator | Big Oak Technologies">
 <meta name="twitter:description" content="See how much money your website could be making with a better design. Free, instant, no obligation.">
-<meta name="twitter:image" content="https://www.bigoaktechnologies.com/assets/img/bigoaklogo.png">
+<meta name="twitter:image" content="https://www.bigoaktechnologies.com/assets/img/logo-black-on-white.png">
 
-<link rel="icon" href="assets/img/bigoaklogo.png">
+<link rel="icon" href="assets/img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;700&family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..700;1,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
-<style>
-  /* ---- Calculator-page-only styles ---- */
-  .calc-grid{ display:grid; grid-template-columns:0.95fr 1.05fr; gap:var(--gap); align-items:start; }
-  @media(max-width:960px){ .calc-grid{ grid-template-columns:1fr; } }
-  .calc-panel{ background:var(--paper); border:1px solid var(--line); padding:34px; }
-  @media(max-width:480px){ .calc-panel{ padding:20px; } .result-row{ padding:18px 20px !important; } .results-cta{ padding:0 20px 20px !important; } .result-source{ padding:14px 20px 20px !important; } .lh-box{ padding:22px !important; } }
-  .calc-panel h3{ font-size:20px; margin-bottom:6px; }
-  .calc-panel .hint{ font-size:12.5px; color:var(--muted); margin:-10px 0 16px; font-family:'Inter', sans-serif; }
-  .field-row{ margin-bottom:16px; }
-  .field-row label{ font-size:12px; color:var(--muted); font-family:'Inter', sans-serif; font-weight:600; margin-bottom:6px; display:block; text-transform:uppercase; letter-spacing:.04em; }
-  .field-row .optional{ text-transform:none; letter-spacing:0; color:var(--muted); font-family:'Inter'; font-weight:400; }
-  .field-row input{ width:100%; padding:13px 14px; border-radius:8px; border:1.5px solid var(--line); font-family:'Inter'; font-size:15px; background:var(--paper); color:var(--ink-2); }
-  .currency-input{ display:flex; gap:8px; margin-bottom:16px; }
-  .currency-input select{ width:112px; flex-shrink:0; padding:13px 8px; border-radius:8px; border:1.5px solid var(--line); font-family:'Inter', sans-serif; font-size:14px; background:var(--paper); color:var(--ink-2); cursor:pointer; }
-  .currency-input select:focus{ outline:none; border-color:var(--btn-plum); }
-  .currency-input input{ flex:1; min-width:0; margin-bottom:0; }
-  @media(max-width:380px){ .currency-input{ flex-direction:column; } .currency-input select{ width:100%; margin-bottom:8px; } }
-  .field-row input:focus{ outline:none; border-color:var(--btn-plum); }
-  .field-note{ font-size:11.5px; color:var(--muted); margin-top:5px; font-family:'Inter', sans-serif; }
-  #calcStatus{ font-size:13px; color:var(--btn-plum); margin-top:10px; display:none; }
-
-  .results-panel{ border:1px solid var(--ink); background:var(--ink); color:#fff; }
-  .results-panel .btn-primary{ background:#fff; color:var(--ink); box-shadow:0 1px 2px rgba(0,0,0,0.14); }
-  .results-panel .btn-primary:hover{ background:#EDEAF6; box-shadow:0 6px 16px rgba(0,0,0,0.2); transform:translateY(-1px); }
-  .results-empty{ padding:60px 34px; text-align:center; color:var(--on-ink-muted); }
-  .results-empty svg{ width:40px; height:40px; stroke:var(--pink); margin:0 auto 18px; }
-  .results-body{ display:none; }
-  .result-row{ display:grid; grid-template-columns:1fr auto; gap:12px; align-items:center; padding:22px 30px; border-bottom:1px solid rgba(255,255,255,0.14); }
-  .result-row .rlabel{ font-family:'Inter', sans-serif; font-weight:600; font-size:12px; color:var(--on-ink-muted); text-transform:uppercase; letter-spacing:.04em; }
-  .result-row .rvalue{ font-family:'JetBrains Mono', monospace; font-size:22px; color:#fff; text-align:right; font-weight:600; }
-  .result-row.hero-row{ padding:30px 30px 26px; border-bottom:1px solid rgba(255,255,255,0.14); background:rgba(240,73,156,0.08); }
-  .result-row.hero-row .rlabel{ color:var(--pink); font-size:13px; }
-  .result-row.hero-row .rvalue{ font-size:38px; }
-  .result-source{ padding:18px 30px 26px; font-size:12px; color:var(--on-ink-muted); font-family:'JetBrains Mono', monospace; }
-  .results-cta{ padding:0 30px 30px; display:flex; gap:12px; flex-wrap:wrap; }
-
-  .lh-box{ border:1px solid var(--line); background:var(--panel); padding:30px 32px; display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
-  .lh-box .lh-icon{ width:50px; height:50px; flex-shrink:0; }
-  .lh-box .lh-icon svg{ width:100%; height:100%; }
-  .lh-box h3{ font-size:18px; margin-bottom:4px; }
-  .lh-box p{ font-size:14.5px; color:var(--muted); max-width:480px; }
-</style>
 </head>
 <body>
 
 <div class="floating-nav" id="floatingNav">
   <a href="index.html" class="floating-nav-brand">
-    <img src="assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">
-    <span class="floating-nav-brand-text"><span class="fnb-thin">Big Oak</span><span class="fnb-bold">Technologies</span></span>
+    <img src="assets/img/logo-white.png" alt="Big Oak Technologies">
   </a>
   <div class="floating-nav-links">
     <a href="index.html#services">Services</a>
@@ -85,16 +42,72 @@
     <a href="academy.html">Academy</a>
     <a href="blog/index.html">Blog</a>
   </div>
+  <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20schedule%20a%20call." target="_blank" rel="noopener" class="btn btn-dark btn-sm floating-nav-cta">Schedule a Call</a>
 </div>
 
 
-<!-- ===================== PAGE HEADER ===================== -->
-<section class="page-header">
-  <div class="wrap">
-    <div class="breadcrumb"><a href="index.html">Home</a> / Free Calculator</div>
-    <span class="eyebrow on-ink">Free tool · 30 seconds</span>
-    <h1>Is your website costing you customers?</h1>
-    <p>Enter a few details below and we'll estimate how much money your business could be making with a better website.</p>
+<!-- ===================== HERO ===================== -->
+<section class="interior-hero calc-hero" id="heroSection">
+  <div class="top-nav">
+    <a href="index.html" class="top-nav-logo"><img src="assets/img/logo-white.png" alt="Big Oak Technologies"></a>
+    <div class="top-nav-menu">
+      <a href="index.html#services">Services</a>
+      <a href="index.html#process">Process</a>
+      <a href="index.html#results">Results</a>
+      <a href="calculator.html">Free Calculator</a>
+      <a href="academy.html">Academy</a>
+      <a href="blog/index.html">Blog</a>
+    </div>
+    <div class="top-nav-cta">
+      <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20schedule%20a%20call." target="_blank" rel="noopener" class="btn btn-dark btn-sm"><span class="btn-label">Schedule a Call</span></a>
+      <button class="top-nav-toggle" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="top-nav-mobile-menu">
+    <div class="top-nav-mobile-menu-actions">
+      <a href="tel:+97474089629" class="btn btn-line on-ink btn-sm">Call Us</a>
+      <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20talk%20about%20growing%20my%20leads." target="_blank" rel="noopener" class="btn btn-dark btn-sm">WhatsApp</a>
+    </div>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#process">Process</a>
+    <a href="index.html#results">Results</a>
+    <a href="calculator.html">Free Calculator</a>
+    <a href="academy.html">Academy</a>
+    <a href="blog/index.html">Blog</a>
+  </div>
+  <div class="wrap hero-wrap">
+    <div>
+      <div class="breadcrumb"><a href="index.html">Home</a> &rsaquo; Free Calculator</div>
+      <span class="eyebrow on-ink">The Revenue Instrument</span>
+      <h1>Is your website costing you <em>customers?</em></h1>
+      <p class="lede">Enter a few details below and we'll estimate how much money your business could be making with a better website. Instrument-grade precision, zero obligation, thirty seconds.</p>
+    </div>
+    <div class="dial-wrap">
+      <div class="oak-ring-wrap">
+        <div class="oak-ring-glow"></div>
+        <svg viewBox="0 0 420 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="An instrument dial illustrating revenue moving from leaking to optimized">
+          <path d="M40 250 A170 170 0 0 1 380 250" fill="none" stroke="rgba(215,197,255,0.25)" stroke-width="1"/>
+          <path d="M64 250 A146 146 0 0 1 356 250" fill="none" stroke="rgba(215,197,255,0.18)" stroke-width="1"/>
+          <path d="M40 250 A170 170 0 0 1 190 82" fill="none" stroke="#4A4436" stroke-width="14" opacity="0.55"/>
+          <path d="M190 82 A170 170 0 0 1 380 250" fill="none" stroke="#8E6ACD" stroke-width="14" opacity="0.9"/>
+          <g stroke="#D7C5FF" stroke-width="1.2" opacity="0.7">
+            <line x1="40" y1="250" x2="52" y2="250"/>
+            <line x1="65.5" y1="140" x2="77" y2="144"/>
+            <line x1="140" y1="59" x2="146" y2="70"/>
+            <line x1="210" y1="34" x2="210" y2="46"/>
+            <line x1="280" y1="59" x2="274" y2="70"/>
+            <line x1="354.5" y1="140" x2="343" y2="144"/>
+            <line x1="380" y1="250" x2="368" y2="250"/>
+          </g>
+          <line x1="210" y1="250" x2="120" y2="118" stroke="#D7C5FF" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="210" cy="250" r="13" fill="#0B0910" stroke="#D7C5FF" stroke-width="1.4"/>
+          <text x="72" y="276" fill="rgba(215,197,255,0.65)" font-family="Inter, sans-serif" font-size="11" letter-spacing="1.5">LEAKING</text>
+          <text x="318" y="276" fill="#D7C5FF" font-family="Inter, sans-serif" font-size="11" letter-spacing="1.5">OPTIMIZED</text>
+        </svg>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -179,13 +192,13 @@
     </div>
     <div class="lh-box reveal">
       <div class="lh-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="var(--magenta)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/><path d="M12 3v2M21 12h-2M12 19v2M5 12H3"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--violet)" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2.5 2.5"/><path d="M12 3v2M21 12h-2M12 19v2M5 12H3"/></svg>
       </div>
       <div style="flex:1; min-width:200px;">
         <h3>Run a free Google Lighthouse audit</h3>
         <p>Google's PageSpeed Insights tool runs a real Lighthouse audit on your live site and scores performance, accessibility, and SEO in about 20 seconds. No signup required.</p>
       </div>
-      <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener" class="btn btn-dark">Open Lighthouse Audit →</a>
+      <a href="https://pagespeed.web.dev/" target="_blank" rel="noopener" class="btn btn-line">Open Lighthouse Audit →</a>
     </div>
   </div>
 </section>
@@ -228,7 +241,7 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <div class="footer-brand"><img src="assets/img/bigoaklogo.png" alt="Big Oak Technologies logo">Big Oak Technologies</div>
+        <div class="footer-brand"><img src="assets/img/logo-black.png" alt="Big Oak Technologies"></div>
         <p style="font-size:14px; max-width:280px;">Websites, SEO, AI marketing, and automatic follow-up that help businesses get more leads, more sales, and grow faster.</p>
       </div>
       <div>
