@@ -637,12 +637,13 @@ footer a:hover{ color:var(--ink); }
 .portfolio-tap-hint{ display:inline-flex; align-items:center; gap:10px; font-family:'Inter', sans-serif; font-size:12.5px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--violet-hi); margin-top:26px; }
 .portfolio-tap-hint svg{ width:15px; height:15px; flex-shrink:0; }
 
-.portfolio-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); }
+.portfolio-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:28px; }
 .portfolio-card{
   background:var(--card); display:flex; flex-direction:column; text-decoration:none;
-  transition:background .18s ease, transform .18s ease; position:relative;
+  border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+  transition:background .18s ease, transform .18s ease, box-shadow .18s ease; position:relative;
 }
-.portfolio-card:hover{ background:var(--paper); transform:translateY(-2px); }
+.portfolio-card:hover{ background:var(--paper); transform:translateY(-4px); box-shadow:0 20px 34px -18px rgba(33,26,40,0.28); }
 
 .portfolio-preview{
   position:relative; width:100%; padding-top:64%; overflow:hidden;
@@ -691,6 +692,7 @@ footer a:hover{ color:var(--ink); }
 .portfolio-preview-more{ display:flex; justify-content:center; margin-top:40px; }
 
 @media(max-width:480px){
+  .portfolio-grid{ gap:20px; }
   .portfolio-preview{ padding-top:78%; }
   .portfolio-info{ padding:18px 20px 20px; }
 }
