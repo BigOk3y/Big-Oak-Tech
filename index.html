@@ -26,6 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..700;1,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/video/hero-poster.jpg">
 <link rel="stylesheet" href="assets/css/style.css">
 <script type="application/ld+json">
 {
@@ -87,7 +88,7 @@
   <a href="#top" class="floating-nav-brand">
     <img src="assets/img/logo-white.png" alt="Big Oak Technologies">
   </a>
-  <div class="floating-nav-links">
+  <div class="floating-nav-links" id="floatingNavLinks">
     <a href="#services">Services</a>
     <a href="#process">Process</a>
     <a href="#results">Results</a>
@@ -96,12 +97,21 @@
     <a href="portfolio.html">Portfolio</a>
     <a href="blog/index.html">Blog</a>
   </div>
+  <button class="floating-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="floatingNavLinks">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+  </button>
   <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20schedule%20a%20call." target="_blank" rel="noopener" class="btn btn-dark btn-sm floating-nav-cta">Schedule a Call</a>
 </div>
 
 
 <!-- ===================== HERO ===================== -->
 <section class="hero rc-hero" id="heroSection">
+  <div class="hero-video" aria-hidden="true">
+    <video autoplay muted loop playsinline preload="auto" poster="assets/video/hero-poster.jpg">
+      <source src="assets/video/hero-720.mp4" type="video/mp4" media="(max-width: 900px)">
+      <source src="assets/video/hero-1080.mp4" type="video/mp4">
+    </video>
+  </div>
   <div class="top-nav">
     <a href="#top" class="top-nav-logo"><img src="assets/img/logo-white.png" alt="Big Oak Technologies"></a>
     <div class="top-nav-menu">
@@ -143,28 +153,6 @@
         <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20talk%20about%20growing%20my%20business." target="_blank" rel="noopener" class="btn btn-primary">Let’s Grow Your Business</a>
         <a href="#services" class="btn btn-line on-ink">See What We Do</a>
       </div>
-    </div>
-    <div class="hero-media">
-      <div class="oak-ring-wrap">
-        <div class="oak-ring-glow"></div>
-        <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Big Oak growth-ring emblem">
-          <circle cx="210" cy="210" r="196" fill="none" stroke="rgba(215,197,255,0.14)" stroke-width="1"/>
-          <g class="oak-ring-slow">
-            <circle cx="210" cy="210" r="176" fill="none" stroke="#8E6ACD" stroke-width="1" stroke-dasharray="2 7" opacity="0.55"/>
-          </g>
-          <circle cx="210" cy="210" r="150" fill="none" stroke="rgba(215,197,255,0.5)" stroke-width="1.2"/>
-          <circle cx="205" cy="214" r="122" fill="none" stroke="#8E6ACD" stroke-width="1" opacity="0.7"/>
-          <circle cx="212" cy="206" r="96" fill="none" stroke="rgba(215,197,255,0.45)" stroke-width="1"/>
-          <circle cx="208" cy="211" r="70" fill="none" stroke="#8E6ACD" stroke-width="1.4" opacity="0.85"/>
-          <circle cx="210" cy="210" r="46" fill="none" stroke="rgba(215,197,255,0.6)" stroke-width="1"/>
-          <circle cx="210" cy="210" r="24" fill="#0B0910" stroke="#D7C5FF" stroke-width="1.2"/>
-          <circle cx="210" cy="210" r="5.5" fill="#D7C5FF"/>
-        </svg>
-      </div>
-      <div class="ring-chip rc1">Website</div>
-      <div class="ring-chip rc2">Local SEO</div>
-      <div class="ring-chip rc3">AI Presence</div>
-      <div class="ring-chip rc4">Follow-Up</div>
     </div>
   </div>
 </section>
@@ -400,7 +388,7 @@
       <a class="portfolio-card reveal" href="https://superlative-tarsier-e1514b.netlify.app/" target="_blank" rel="noopener">
         <div class="portfolio-preview">
           <div class="portfolio-browser-bar"><span></span><span></span><span></span><em>superlative-tarsier-e1514b.netlify.app</em></div>
-          <iframe src="https://superlative-tarsier-e1514b.netlify.app/" loading="lazy" title="Preview of a WhatsApp order webstore" tabindex="-1"></iframe>
+          <img class="portfolio-shot" src="assets/img/portfolio/whatsapp-webstore.webp" alt="" width="1440" height="900" decoding="async" data-live="https://superlative-tarsier-e1514b.netlify.app/">
           <div class="portfolio-preview-veil"><span>Tap to view live site</span></div>
         </div>
         <div class="portfolio-info">
@@ -414,7 +402,7 @@
       <a class="portfolio-card reveal" href="https://tubular-churros-6225af.netlify.app/" target="_blank" rel="noopener">
         <div class="portfolio-preview">
           <div class="portfolio-browser-bar"><span></span><span></span><span></span><em>tubular-churros-6225af.netlify.app</em></div>
-          <iframe src="https://tubular-churros-6225af.netlify.app/" loading="lazy" title="Preview of an ecommerce webstore" tabindex="-1"></iframe>
+          <img class="portfolio-shot" src="assets/img/portfolio/ecommerce-webstore.webp" alt="" width="1440" height="900" decoding="async" data-live="https://tubular-churros-6225af.netlify.app/">
           <div class="portfolio-preview-veil"><span>Tap to view live site</span></div>
         </div>
         <div class="portfolio-info">
@@ -428,7 +416,7 @@
       <a class="portfolio-card reveal" href="https://wearewearsample.netlify.app/" target="_blank" rel="noopener">
         <div class="portfolio-preview">
           <div class="portfolio-browser-bar"><span></span><span></span><span></span><em>wearewearsample.netlify.app</em></div>
-          <iframe src="https://wearewearsample.netlify.app/" loading="lazy" title="Preview of an Arabic clothing webstore" tabindex="-1"></iframe>
+          <img class="portfolio-shot" src="assets/img/portfolio/arabic-clothing.webp" alt="" width="1440" height="900" decoding="async" data-live="https://wearewearsample.netlify.app/">
           <div class="portfolio-preview-veil"><span>Tap to view live site</span></div>
         </div>
         <div class="portfolio-info">
@@ -455,14 +443,14 @@
         <div class="oak-ring-wrap">
           <div class="oak-ring-glow"></div>
           <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="The Oak Presence ring mark">
-            <circle cx="150" cy="150" r="138" fill="none" stroke="rgba(215,197,255,0.22)" stroke-width="1"/>
-            <circle cx="146" cy="153" r="112" fill="none" stroke="#D7C5FF" stroke-width="1" opacity="0.55"/>
-            <circle cx="152" cy="148" r="84" fill="none" stroke="rgba(215,197,255,0.6)" stroke-width="1.2"/>
-            <circle cx="150" cy="150" r="56" fill="none" stroke="#D7C5FF" stroke-width="1" opacity="0.7"/>
-            <circle cx="150" cy="150" r="30" fill="rgba(215,197,255,0.1)" stroke="#D7C5FF" stroke-width="1.4"/>
-            <path d="M150 150 L150 96" stroke="#D7C5FF" stroke-width="1.4" stroke-linecap="round"/>
-            <path d="M150 150 L184 168" stroke="#D7C5FF" stroke-width="1.4" stroke-linecap="round"/>
-            <circle cx="150" cy="150" r="4" fill="#D7C5FF"/>
+            <circle cx="150" cy="150" r="138" fill="none" stroke="rgba(227,199,155,0.22)" stroke-width="1"/>
+            <circle cx="146" cy="153" r="112" fill="none" stroke="#E3C79B" stroke-width="1" opacity="0.55"/>
+            <circle cx="152" cy="148" r="84" fill="none" stroke="rgba(227,199,155,0.6)" stroke-width="1.2"/>
+            <circle cx="150" cy="150" r="56" fill="none" stroke="#E3C79B" stroke-width="1" opacity="0.7"/>
+            <circle cx="150" cy="150" r="30" fill="rgba(227,199,155,0.1)" stroke="#E3C79B" stroke-width="1.4"/>
+            <path d="M150 150 L150 96" stroke="#E3C79B" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M150 150 L184 168" stroke="#E3C79B" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="150" cy="150" r="4" fill="#E3C79B"/>
           </svg>
         </div>
         <span class="eyebrow on-ink">Oak Presence</span>
