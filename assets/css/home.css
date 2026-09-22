@@ -1,0 +1,33 @@
+/* =========================================================
+   HOME PAGE: puts the motion reel in the site's own colours
+   (marble ink, sand, sign gold) and type (Fraunces over Inter).
+   ========================================================= */
+body.r-home{
+  --r-bg:#231C18;          /* --ink */
+  --r-bg-2:#1B1512;        /* a step deeper, for the sliding reel */
+  --r-fg:#F3EDE3;          /* --paper */
+  --r-muted:rgba(243,237,227,.64);
+  --r-accent:#E3C79B;      /* --accent-hi, sign gold */
+  --r-line:rgba(243,237,227,.14);
+  --r-btn-bg:#F3EDE3;
+  --r-btn-fg:#231C18;
+  --r-btn-hover:#E3C79B;
+  --r-display:'Fraunces',Georgia,serif;
+  --r-body:'Inter',system-ui,sans-serif;
+  --r-dw:500;
+  --r-track:-.035em;
+  --r-lh:.95;
+  background:var(--r-bg);
+}
+/* zero specificity, so any of the site's sections that set their own background keep it */
+:where(body.r-home .home-main > section){ background-color:var(--paper); }
+
+/* the site nav sits on top of the reel hero */
+.r-hero .top-nav{ position:absolute; top:0; left:0; right:0; z-index:5; }
+.r-hero .top-nav-mobile-menu{ z-index:30; }
+@media (min-aspect-ratio:4/5){ .r-hero-slot{ top:17vh; } }
+.reel .r-hero h1 .r-mask:nth-child(4) span,
+.reel .r-hero h1 .r-mask:nth-child(5) span{ font-style:italic; color:var(--r-accent); }
+
+@media (pointer:fine){ body.r-home, body.r-home a, body.r-home button{ cursor:none; } }
+

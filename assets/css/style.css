@@ -863,3 +863,17 @@ footer a:hover{ color:var(--ink); }
   .rc-feature{ align-items:flex-start; }
   .rc-stat{ text-align:center; }
 }
+
+/* ---------- BOOK A FREE CALL: pill CTA used in both navs ---------- */
+.btn-call{
+  display:inline-flex; align-items:center; gap:.6em; white-space:nowrap;
+  padding:12px 22px; border-radius:999px; border:0;
+  font-family:'Inter',sans-serif; font-weight:600; font-size:13.5px; letter-spacing:-.005em;
+  background:var(--paper); color:var(--ink);
+  transition:background-color .35s cubic-bezier(.7,0,.2,1), color .35s cubic-bezier(.7,0,.2,1), transform .2s ease;
+  will-change:transform;
+}
+.btn-call:hover{ background:var(--accent-hi); color:var(--ink); }
+.btn-call-dot{ width:8px; height:8px; border-radius:50%; background:#3FBF6E; box-shadow:0 0 0 4px rgba(63,191,110,.18); flex-shrink:0; }
+.floating-nav-cta.btn-call{ padding:11px 20px; }
+@media(max-width:900px){ .top-nav-cta .btn-call{ display:none; } }

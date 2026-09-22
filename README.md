@@ -184,3 +184,34 @@ open and Escape-to-close; floating nav appearing only past the hero; syllabus
 accordion; blog category filter; at most one preview mounted on load; no broken
 internal links across all pages; keyboard focus visible throughout; and
 `prefers-reduced-motion` honoured.
+
+---
+
+## Home page motion reel (September 2026)
+
+The home page now opens with the motion reel: the particle Big Oak tree, the
+word-by-word statement, the sliding video panels, the video that opens to full
+screen, the counters, the services ticker and the "Big Oak" finale. It is
+coloured with the site's own palette and set in Fraunces over Inter. The site's
+nav and footer are unchanged, and the Services, Why Big Oak, Process, Results,
+Portfolio, Oak Presence and lead form sections still sit between the reel and
+the finale, so every nav link still lands.
+
+Files: `assets/css/reel.css` (reel layout), `assets/css/home.css` (site
+colours for the reel), `assets/js/reel.js`, `assets/js/tree-points.js`,
+`assets/js/vendor/` (Three.js, GSAP, ScrollTrigger, Lenis, all local),
+`assets/video/reel/` (the five clips and their poster frames).
+
+The long loader plays on the first visit of a session only. Press **D** on the
+home page to auto-scroll it for screen recording; add `?demo` to the address to
+start that automatically after the loader.
+
+Logos are now vector: `assets/img/logo-white.svg`, `logo-black.svg` and
+`tree-mark.svg`. The PNG, WebP and icon files were regenerated from the same
+vector. `og-image.jpg` is a photo composite and was left as it was.
+
+The nav "Schedule a Call" button is now the **Book a free call** pill
+(`.btn-call` in `style.css`) on every page.
+
+The old hero video files and `hero3d*.js` are no longer used by any page and
+can be deleted.
