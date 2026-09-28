@@ -1,6 +1,7 @@
 /* =========================================================
    HOME PAGE: puts the motion reel in the site's own colours
-   (marble ink, sand, sign gold) and type (Fraunces over Inter).
+   (marble ink, sand, sign gold) and type (Bricolage Grotesque
+   for the display lines over Plus Jakarta Sans).
    ========================================================= */
 body.r-home{
   --r-bg:#231C18;          /* --ink */
@@ -12,11 +13,11 @@ body.r-home{
   --r-btn-bg:#F3EDE3;
   --r-btn-fg:#231C18;
   --r-btn-hover:#E3C79B;
-  --r-display:'Fraunces',Georgia,serif;
-  --r-body:'Inter',system-ui,sans-serif;
-  --r-dw:500;
-  --r-track:-.035em;
-  --r-lh:.95;
+  --r-display:'Bricolage Grotesque','Plus Jakarta Sans',system-ui,sans-serif;
+  --r-body:'Plus Jakarta Sans',system-ui,sans-serif;
+  --r-dw:700;
+  --r-track:-.045em;
+  --r-lh:.92;
   background:var(--r-bg);
 }
 /* zero specificity, so any of the site's sections that set their own background keep it */
@@ -26,8 +27,13 @@ body.r-home{
 .r-hero .top-nav{ position:absolute; top:0; left:0; right:0; z-index:5; }
 .r-hero .top-nav-mobile-menu{ z-index:30; }
 @media (min-aspect-ratio:4/5){ .r-hero-slot{ top:17vh; } }
-.reel .r-hero h1 .r-mask:nth-child(4) span,
-.reel .r-hero h1 .r-mask:nth-child(5) span{ font-style:italic; color:var(--r-accent); }
+.reel h1,.reel h2,.reel h3,.r-num,.r-bigword,.r-mgroup span,.r-expand-words span,.r-work-end p,.r-loader-count{ font-optical-sizing:auto; }
 
-@media (pointer:fine){ body.r-home, body.r-home a, body.r-home button{ cursor:none; } }
+/* Hero headline: the one loud typographic moment on the site.
+   Heavy, slightly condensed Bricolage for the first two lines, then the
+   last line opens up to full width in gold, so the sentence lands. */
+.reel .r-hero h1{ font-weight:800; font-stretch:88%; letter-spacing:-.05em; line-height:.9; max-width:44vw; }
+@media (max-aspect-ratio:4/5){ .reel .r-hero h1{ max-width:9.6ch; font-size:clamp(2.9rem,14vw,7rem); } }
+.reel .r-hero h1 .r-mask:nth-child(4) span,
+.reel .r-hero h1 .r-mask:nth-child(5) span{ color:var(--r-accent); font-stretch:100%; font-weight:700; letter-spacing:-.055em; }
 

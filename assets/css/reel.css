@@ -35,22 +35,12 @@ body.r-loading{overflow:hidden}
 .reel section.r-sec{padding:0;border:0;position:relative}
 
 .r-grain{
-  position:fixed;inset:-50%;z-index:90;pointer-events:none;opacity:.07;
+  position:fixed;inset:0;z-index:90;pointer-events:none;opacity:.06;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:r-grain 1s steps(6) infinite;
 }
 body.r-past-reel .r-grain{opacity:0}
-@keyframes r-grain{0%{transform:translate(0,0)}20%{transform:translate(-6%,4%)}40%{transform:translate(4%,-7%)}60%{transform:translate(-3%,6%)}80%{transform:translate(7%,2%)}100%{transform:translate(0,0)}}
 
-/* ---------- cursor ---------- */
-.r-cursor,.r-ring{position:fixed;top:0;left:0;z-index:400;pointer-events:none;border-radius:50%;transform:translate(-50%,-50%);opacity:0;transition:opacity .3s}
-body.r-cursor-on .r-cursor,body.r-cursor-on .r-ring{opacity:1}
-.r-cursor{width:6px;height:6px;background:var(--r-fg);mix-blend-mode:difference}
-.r-ring{width:42px;height:42px;border:1px solid var(--r-accent);transition:width .35s var(--r-ease),height .35s var(--r-ease),background-color .35s,opacity .3s}
-body.r-hovering .r-ring{width:84px;height:84px;background:rgba(201,168,102,.14)}
-body.r-demo .r-cursor,body.r-demo .r-ring{opacity:0!important}
-body.r-demo,body.r-demo *{cursor:none!important}
-@media (pointer:coarse){.r-cursor,.r-ring{display:none}}
+/* cursor: see the site-wide arrow cursor in style.css */
 
 /* ---------- preloader ---------- */
 .r-loader{position:fixed;inset:0;z-index:500;pointer-events:none}
@@ -94,12 +84,6 @@ body.r-demo,body.r-demo *{cursor:none!important}
 @keyframes r-cue{0%{top:-100%}60%,100%{top:100%}}
 .r-hero-reveal{opacity:0}
 
-/* ---------- statement ---------- */
-.reel section.r-statement{background:var(--r-bg);padding:clamp(120px,24vh,260px) var(--r-pad)}
-.r-statement p.r-big{font-family:var(--r-display);font-weight:var(--r-dw);font-size:clamp(1.9rem,4.6vw,5rem);line-height:1.06;letter-spacing:calc(var(--r-track) * .65);max-width:19ch}
-.r-statement .r-w{opacity:.13}
-.r-note{margin-top:clamp(40px,6vh,72px);display:flex;align-items:center;gap:16px;color:var(--r-muted)}
-.r-note img{width:28px;opacity:.7}
 
 /* ---------- work (horizontal) ---------- */
 .reel section.r-work{background:var(--r-bg-2);height:100vh;height:100svh;overflow:hidden}
@@ -138,7 +122,7 @@ body.r-demo,body.r-demo *{cursor:none!important}
 .r-expand-copy>*{opacity:0}
 
 /* ---------- stats ---------- */
-.reel section.r-stats{background:var(--r-bg);padding:clamp(110px,20vh,220px) var(--r-pad)}
+.reel section.r-stats{background:var(--r-bg);padding:clamp(56px,9vh,110px) var(--r-pad)}
 .r-stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,3vw,56px)}
 .r-stat{position:relative;padding-top:28px}
 .r-stat::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:var(--r-fg);opacity:.35;transform-origin:left;transform:scaleX(var(--draw,0))}
@@ -147,7 +131,7 @@ body.r-demo,body.r-demo *{cursor:none!important}
 .r-stat p{margin-top:18px;color:var(--r-muted);max-width:22ch;font-size:clamp(1rem,1.1vw,1.15rem)}
 
 /* ---------- marquee ---------- */
-.reel section.r-marquee{background:var(--r-bg);border-top:1px solid var(--r-line);border-bottom:1px solid var(--r-line);overflow:hidden;padding:clamp(22px,3vw,40px) 0}
+.reel section.r-marquee{background:var(--r-bg);border-top:1px solid var(--r-line);border-bottom:1px solid var(--r-line);overflow:hidden;padding:clamp(18px,2.4vw,32px) 0}
 .r-mtrack{display:flex;width:max-content;will-change:transform}
 .r-mgroup{display:flex;align-items:center;flex-shrink:0}
 .r-mgroup span{font-family:var(--r-display);font-weight:var(--r-dw);font-size:clamp(2.4rem,6.4vw,6.8rem);letter-spacing:var(--r-track);line-height:1.05;white-space:nowrap;padding:0 .35em}
@@ -155,10 +139,10 @@ body.r-demo,body.r-demo *{cursor:none!important}
 .r-mgroup img{height:clamp(30px,4.4vw,70px);width:auto;opacity:.55;flex-shrink:0}
 
 /* ---------- CTA finale ---------- */
-.reel section.r-cta{background:transparent;height:100vh;height:100svh;min-height:600px;display:flex;flex-direction:column;justify-content:flex-end;padding:0 var(--r-pad) calc(var(--r-pad)*.5);overflow:hidden}
-.r-cta-inner{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;margin-bottom:clamp(24px,4.5vh,60px);padding-top:clamp(84px,11vh,130px)}
+.reel section.r-cta{background:transparent;height:auto;min-height:min(100svh,760px);display:flex;flex-direction:column;justify-content:flex-end;padding:0 var(--r-pad) calc(var(--r-pad)*.5);overflow:hidden}
+.r-cta-inner{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;text-align:center;margin-bottom:clamp(20px,3.5vh,44px);padding-top:clamp(48px,8vh,96px)}
 /* the oak particles are drawn inside this box, so they can never cover the heading */
-.r-cta-slot{width:min(70vw,520px);flex:1 1 auto;min-height:80px;max-height:340px;margin-bottom:clamp(16px,3vh,36px)}
+.r-cta-slot{width:min(70vw,520px);height:clamp(180px,32vh,320px);flex:0 0 auto;margin-bottom:clamp(14px,2.5vh,28px)}
 .r-cta h2{font-size:clamp(2.2rem,4.6vw,5.2rem);line-height:.98;letter-spacing:calc(var(--r-track) * .85);max-width:17ch}
 .r-cta .r-pill{margin-top:clamp(28px,4vh,44px);font-size:clamp(1rem,1.2vw,1.25rem);padding:1.15em 2em}
 .r-bigword{display:flex;justify-content:center;overflow:hidden;white-space:nowrap;font-family:var(--r-display);font-weight:var(--r-dw);font-size:min(17vw,26vh);line-height:1;letter-spacing:var(--r-track);padding-bottom:.14em;margin-bottom:-.1em}
@@ -176,7 +160,6 @@ body.r-demo,body.r-demo *{cursor:none!important}
   .r-hero h1{font-size:clamp(3rem,15vw,8rem);max-width:8ch}
   .r-hero-foot{flex-direction:column;align-items:flex-start}
   .r-cue{display:none}
-  .r-statement p.r-big{font-size:clamp(2rem,8.4vw,4.4rem)}
   .r-work-intro{width:78vw}
   .r-work-intro h2{font-size:clamp(2.8rem,13vw,6rem)}
   .r-panel{width:82vw;height:64vh}
@@ -185,11 +168,11 @@ body.r-demo,body.r-demo *{cursor:none!important}
   .r-work-end{width:70vw}
   .r-expand-words span{font-size:clamp(2.6rem,15vw,7rem)}
   .r-expand-media{clip-path:inset(34% 18% 34% 18% round 22px)}
-  .r-stats-grid{grid-template-columns:1fr;gap:56px}
+  .r-stats-grid{grid-template-columns:1fr;gap:36px}
   .r-num{font-size:clamp(5rem,26vw,11rem)}
   .r-mgroup span{font-size:clamp(2.8rem,13vw,6rem)}
   .r-cta-slot{width:80vw}
   .r-cta h2{font-size:clamp(2.4rem,11vw,5rem)}
   .r-bigword{font-size:22vw}
 }
-@media (prefers-reduced-motion:reduce){.r-grain,.r-cue i::after{animation:none}}
+@media (prefers-reduced-motion:reduce){.r-cue i::after{animation:none}}

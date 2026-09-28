@@ -215,3 +215,60 @@ The nav "Schedule a Call" button is now the **Book a free call** pill
 
 The old hero video files and `hero3d*.js` are no longer used by any page and
 can be deleted.
+
+---
+
+## Revision (28 September 2026)
+
+**Navigation.** Every page now has the same five links: Oak Presence, Oak
+Academy, Portfolio, Blog and Free Website (the calculator). On phones the
+floating and top navs read logo, **Book a free call**, then the hamburger.
+
+**Hero sculpture.** The particles cycle tree → growth chart → social sphere.
+The chart is a tilted set of rising bars on a grid floor with a trend line and
+arrow climbing above them. The sphere holds six icons orbiting inside it (like,
+comment, play, share, @, #). These are generic symbols, not platform logos; to
+use official artwork, add it from each platform's brand kit and sample it the
+same way the `glyphs` array in `assets/js/reel.js` does.
+
+**Type.** Bricolage Grotesque for hero-size headlines only; Plus Jakarta Sans
+for everything else; JetBrains Mono only for calculator figures. All three are
+self-hosted in `assets/fonts/`, and the site no longer calls Google Fonts.
+
+**Home page.** The statement section after the hero, the portfolio preview and
+the Oak Presence section were removed. Oak Presence and Oak Academy now appear
+as two link cards under Services. Oak Presence has its own page,
+`presence.html` (also added to `sitemap.xml`).
+
+**Layout.** Cards on every page sit in evenly spaced grids with their own
+border and rounded corners. Section spacing is tighter on all screen sizes, and
+several mobile layouts (service cards, content cards, values) are more compact.
+
+**Cursor.** The dot-and-ring cursor is gone. The site now uses a small arrow
+drawn by the operating system (no lag), which turns gold over clickable items.
+It is defined at the end of `style.css`.
+
+**Copy.** Regional references now read internationally. The one regional line
+is on the "Built for any market" card: rooted in the Middle East, building for
+businesses across Africa, Europe, the Americas and Asia.
+
+**Portfolio screenshots.** `assets/img/portfolio/` now holds WebP screenshots
+for all six projects (whatsapp-webstore = Oakhaven, ecommerce-webstore = Aura,
+arabic-clothing = WeAre Wear, qatar-moving, cassiar-consulting, dogfood). To add or replace a
+screenshot, save a 1440px-wide WebP under the same file name.
+
+## Speed fixes (28 September 2026)
+
+- **Videos** no longer autoplay on load. Each one downloads only when it is
+  about to scroll into view, and pauses when it leaves the screen
+  (`reel.js`, bottom of the file). Homepage first load dropped from about
+  17 MB to about 1.7 MB.
+- **Smooth scroll** glide shortened from 1.25s to 0.8s. Phones keep their
+  native scrolling.
+- **Particles**: phones and low-power devices draw half the points (about
+  5,500) at a lower pixel ratio, with slightly larger dots.
+- **Film grain** is now a static layer the size of the screen, not an
+  animated one twice its size.
+- **Process photo**: the page now serves the 94 KB WebP, and the JPEG
+  fallback was re-saved at 900px (2.8 MB → 170 KB).
+- **Loading screen** shortened from about 3.5s to about 1.5s on first visit.

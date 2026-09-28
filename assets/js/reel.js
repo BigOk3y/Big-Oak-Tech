@@ -1,5 +1,6 @@
 /* =========================================================
    BIG OAK REEL: motion homepage behaviour
+   Hero sculpture cycles: tree -> growth chart -> social sphere.
    Needs: three.min.js, gsap.min.js, ScrollTrigger.min.js,
           lenis.min.js, tree-points.js (loaded before this file)
    Settings come from window.REEL (set in the page).
@@ -28,7 +29,7 @@
   gsap.registerPlugin(ScrollTrigger);
 
   /* ---------------- smooth scroll ---------------- */
-  const lenis = new Lenis({ duration: 1.25, smoothWheel: !reduceMotion, easing: t => 1 - Math.pow(1 - t, 3.2) });
+  const lenis = new Lenis({ duration: .8, smoothWheel: !reduceMotion, easing: t => 1 - Math.pow(1 - t, 3) });
   window.lenis = lenis;
   lenis.on("scroll", ScrollTrigger.update);
   gsap.ticker.add(t => lenis.raf(t * 1000));
@@ -48,39 +49,127 @@
   });
 
   /* =========================================================
-     PARTICLE OAK
-     The oak is always drawn inside a "slot" element on the page
+     PARTICLE SCULPTURE
+     One cloud of particles that re-forms into three shapes:
+       1. the Big Oak tree
+       2. a tilted growth chart: rising bars on a grid floor, with a
+          trend line and arrow climbing above them
+       3. a glass sphere with social icons (like, comment, play,
+          share, @, #) orbiting inside it
+     It is always drawn inside a "slot" element on the page
      (.r-hero-slot in the hero, .r-cta-slot in the finale), so it
      follows the layout and never sits on top of text.
      ========================================================= */
   const GL = (() => {
     const canvas = document.getElementById("r-gl");
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
-    const DPR = Math.min(devicePixelRatio || 1, 2);
+    const light = Math.min(innerWidth, innerHeight) < 700 || (navigator.hardwareConcurrency || 8) <= 4;
+    const DPR = Math.min(devicePixelRatio || 1, light ? 1.5 : 2);
     renderer.setPixelRatio(DPR);
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
     camera.position.set(0, 0, 6);
 
     const bin = atob(window.TREE_POINTS);
-    const u16 = new Uint16Array(bin.length / 2);
-    for (let i = 0; i < u16.length; i++) u16[i] = bin.charCodeAt(i * 2) | (bin.charCodeAt(i * 2 + 1) << 8);
-    const N = u16.length / 2;
+    const all = new Uint16Array(bin.length / 2);
+    for (let i = 0; i < all.length; i++) all[i] = bin.charCodeAt(i * 2) | (bin.charCodeAt(i * 2 + 1) << 8);
+    // phones draw about half the points (every other one keeps the tree's shape even)
+    const step = light ? 2 : 1, N = Math.floor(all.length / 2 / step), u16 = new Uint16Array(N * 2);
+    for (let i = 0; i < N; i++) { u16[i * 2] = all[i * step * 2]; u16[i * 2 + 1] = all[i * step * 2 + 1]; }
 
-    const tree = new Float32Array(N * 3), sphere = new Float32Array(N * 3), scatter = new Float32Array(N * 3), grid = new Float32Array(N * 2);
-    const golden = Math.PI * (3 - Math.sqrt(5)), cols = 110, rows = Math.ceil(N / cols);
+    // a fixed random order, so every shape takes particles from all over the tree
+    const order = new Uint32Array(N);
+    for (let i = 0; i < N; i++) order[i] = i;
+    for (let i = N - 1; i > 0; i--) { const j = (Math.random() * (i + 1)) | 0; const t = order[i]; order[i] = order[j]; order[j] = t; }
+
+    const tree = new Float32Array(N * 3), scatter = new Float32Array(N * 3);
     for (let i = 0; i < N; i++) {
       tree[i * 3] = u16[i * 2] / 65535 * 3 - 1.5;
       tree[i * 3 + 1] = u16[i * 2 + 1] / 65535 * 3 - 1.5;
       tree[i * 3 + 2] = (Math.random() - .5) * .1;
-      const y = 1 - (i / (N - 1)) * 2, r = Math.sqrt(1 - y * y), th = golden * i;
-      sphere[i * 3] = Math.cos(th) * r; sphere[i * 3 + 1] = y; sphere[i * 3 + 2] = Math.sin(th) * r;
       scatter[i * 3] = (Math.random() - .5) * 11;
       scatter[i * 3 + 1] = (Math.random() - .5) * 7;
       scatter[i * 3 + 2] = (Math.random() - .5) * 5;
-      grid[i * 2] = ((i % cols) / (cols - 1)) * 2 - 1;
-      grid[i * 2 + 1] = (Math.floor(i / cols) / (rows - 1)) * 2 - 1;
     }
+
+    /* ---------- growth chart ---------- */
+    // kind 0 = floor grid, 1 = bar surface, 2 = trend line, 3 = arrow head
+    const gKind = new Uint8Array(N), gA = new Float32Array(N), gB = new Float32Array(N), gC = new Float32Array(N);
+    const BARS = 8, FLOOR = -0.92, X0 = -1.05, X1 = 1.05, DEPTH = 0.42;
+    const curve = s => -0.62 + 1.5 * (Math.exp(2.3 * s) - 1) / (Math.exp(2.3) - 1) + 0.055 * Math.sin(s * 21) * (1 - s * .6);
+    const xAt = s => X0 + (X1 - X0) * s;
+    const nGrid = Math.floor(N * .17), nBars = Math.floor(N * .5), nLine = Math.floor(N * .27);
+    for (let r = 0; r < N; r++) {
+      const i = order[r];
+      if (r < nGrid) {
+        gKind[i] = 0;
+        if (Math.random() < .55) { gA[i] = X0 - .08 + Math.random() * (X1 - X0 + .16); gC[i] = -DEPTH + (Math.floor(Math.random() * 4) / 3) * DEPTH * 2; }
+        else { gA[i] = X0 + (Math.floor(Math.random() * 9) / 8) * (X1 - X0); gC[i] = -DEPTH + Math.random() * DEPTH * 2; }
+      } else if (r < nGrid + nBars) {
+        gKind[i] = 1;
+        const b = (r - nGrid) % BARS, w = .085, face = Math.random();
+        let lx, lz;
+        if (face < .25) { lx = -w; lz = (Math.random() * 2 - 1) * w; }
+        else if (face < .5) { lx = w; lz = (Math.random() * 2 - 1) * w; }
+        else if (face < .75) { lx = (Math.random() * 2 - 1) * w; lz = -w; }
+        else { lx = (Math.random() * 2 - 1) * w; lz = w; }
+        gA[i] = b + (lx + w) / (2 * w) * .999;             // bar index + x across the bar
+        gB[i] = Math.random() < .12 ? 1 : Math.pow(Math.random(), .8); // height fraction (some on the lid)
+        gC[i] = lz;
+      } else if (r < nGrid + nBars + nLine) {
+        gKind[i] = 2; gA[i] = Math.random(); gB[i] = (Math.random() - .5) * .025; gC[i] = (Math.random() - .5) * .025;
+      } else {
+        gKind[i] = 3; const u = Math.random(), v = (Math.random() - .5) * (1 - u); gA[i] = u; gB[i] = v;
+      }
+    }
+    const tiltX = .32, tiltY = -.42;
+    const cX = Math.cos(tiltX), sX = Math.sin(tiltX), cY = Math.cos(tiltY), sY = Math.sin(tiltY);
+
+    /* ---------- sphere + social icons ---------- */
+    const golden = Math.PI * (3 - Math.sqrt(5));
+    const nShell = Math.floor(N * .4), nIconPts = N - nShell, ICONS = 6;
+    const shell = new Float32Array(N * 3), icon = new Float32Array(N * 3); // icon: u, v, icon index
+    const role = new Uint8Array(N); // 0 shell, 1 icon
+    // Generic social glyphs drawn on a 24-unit grid, then sampled into points.
+    const glyphs = [
+      c => { c.fill(new Path2D("M12 20.5 4.2 13A5 5 0 0 1 12 6.6 5 5 0 0 1 19.8 13Z")); },              // like
+      c => { c.stroke(new Path2D("M20.5 11.5a8.3 8.3 0 0 1-12.2 7.3L3.5 20.5l1.6-4.5A8.3 8.3 0 1 1 20.5 11.5Z"));
+             [8, 12, 16].forEach(x => { c.beginPath(); c.arc(x, 11.5, 1.3, 0, 7); c.fill(); }); },       // comment
+      c => { c.stroke(new Path2D("M5 4.5h14a2.5 2.5 0 0 1 2.5 2.5v10a2.5 2.5 0 0 1-2.5 2.5H5A2.5 2.5 0 0 1 2.5 17V7A2.5 2.5 0 0 1 5 4.5Z"));
+             c.fill(new Path2D("M10 8.5v7l6-3.5Z")); },                                                   // play
+      c => { c.stroke(new Path2D("M8 11 16 6.5M8 13l8 4.5"));
+             [[6, 12], [18, 5.5], [18, 18.5]].forEach(p => { c.beginPath(); c.arc(p[0], p[1], 2.7, 0, 7); c.fill(); }); }, // share
+      c => { c.stroke(new Path2D("M16 12a4 4 0 1 1-1.2-2.9M16 8.5V13a2.5 2.5 0 0 0 5 0v-1a9 9 0 1 0-3.5 7.1")); }, // @
+      c => { c.stroke(new Path2D("M4.5 9h16M3.5 15h16M10 3.5 8 20.5M16 3.5l-2 17")); }                  // #
+    ];
+    function sampleGlyph(draw, count) {
+      const S = 120, cv = document.createElement("canvas"); cv.width = cv.height = S;
+      const c = cv.getContext("2d");
+      c.fillStyle = c.strokeStyle = "#fff"; c.lineWidth = 2.1; c.lineCap = c.lineJoin = "round";
+      c.scale(S / 24, S / 24); draw(c);
+      const d = c.getImageData(0, 0, S, S).data, px = [];
+      for (let y = 0; y < S; y++) for (let x = 0; x < S; x++) if (d[(y * S + x) * 4 + 3] > 110) px.push(x, y);
+      const out = new Float32Array(count * 2), n = px.length / 2;
+      for (let k = 0; k < count; k++) {
+        const j = ((Math.random() * n) | 0) * 2;
+        out[k * 2] = (px[j] + Math.random()) / S - .5; out[k * 2 + 1] = .5 - (px[j + 1] + Math.random()) / S;
+      }
+      return out;
+    }
+    const perIcon = Math.floor(nIconPts / ICONS), iconPts = glyphs.map(g => sampleGlyph(g, perIcon + ICONS));
+    for (let r = 0; r < N; r++) {
+      const i = order[r];
+      if (r < nShell) {
+        role[i] = 0;
+        const y = 1 - (r / (nShell - 1)) * 2, rr = Math.sqrt(1 - y * y), th = golden * r;
+        shell[i * 3] = Math.cos(th) * rr; shell[i * 3 + 1] = y; shell[i * 3 + 2] = Math.sin(th) * rr;
+      } else {
+        role[i] = 1;
+        const k = r - nShell, ic = Math.min(ICONS - 1, Math.floor(k / perIcon)), j = k - ic * perIcon;
+        icon[i * 3] = iconPts[ic][j * 2]; icon[i * 3 + 1] = iconPts[ic][j * 2 + 1]; icon[i * 3 + 2] = ic;
+      }
+    }
+
     const pos = new Float32Array(scatter), rnd = new Float32Array(N), speed = new Float32Array(N);
     for (let i = 0; i < N; i++) { rnd[i] = Math.random(); speed[i] = .028 + Math.random() * .045; }
 
@@ -110,9 +199,9 @@
       camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
       S.visH = 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
       S.visW = S.visH * camera.aspect;
-      mat.uniforms.uSize.value = (innerHeight / 900) * 22 * (camera.aspect < .8 ? 1.1 : 1);
+      mat.uniforms.uSize.value = (innerHeight / 900) * 22 * (camera.aspect < .8 ? 1.1 : 1) * (light ? 1.25 : 1);
     }
-    // fit the tree (2 units tall, about 2.3 wide) inside a slot's on-screen box
+    // fit the shapes (2 units tall, about 2.3 wide) inside a slot's on-screen box
     function slotTarget() {
       const el = slots[S.context];
       if (!el) return { x: 0, y: 0, s: 1 };
@@ -128,9 +217,9 @@
     function startCycle() {
       stopCycle();
       if (reduceMotion) { setShape("tree"); return; }
-      const order = ["tree", "sphere", "wave"], hold = { tree: 6500, sphere: 4200, wave: 4500 };
+      const seq = ["tree", "graph", "sphere"], hold = { tree: 6500, graph: 5600, sphere: 5600 };
       let i = 0; setShape("tree");
-      const next = () => { i = (i + 1) % order.length; setShape(order[i]); S.cycle = setTimeout(next, hold[order[i]]); };
+      const next = () => { i = (i + 1) % seq.length; setShape(seq[i]); S.cycle = setTimeout(next, hold[seq[i]]); };
       S.cycle = setTimeout(next, hold.tree);
     }
     function setContext(c) {
@@ -142,6 +231,7 @@
     addEventListener("pointermove", e => { S.mouse.tx = (e.clientX / innerWidth) * 2 - 1; S.mouse.ty = -(e.clientY / innerHeight) * 2 + 1; });
     document.addEventListener("pointerleave", () => { S.mouse.tx = 9; S.mouse.ty = 9; });
 
+    const barH = new Float32Array(BARS), barTop = new Float32Array(BARS);
     const clock = new THREE.Clock();
     function tick() {
       const dt = Math.min(clock.getDelta(), .1), t = clock.elapsedTime, f60 = dt * 60;
@@ -163,18 +253,51 @@
 
       const mx = S.mouse.x * S.visW / 2 - L.x, my = S.mouse.y * S.visH / 2 - L.y;
       const R = .62 * Math.max(.6, L.s / 1.3), R2 = R * R, sc = L.s, shape = S.shape;
+
+      // per-frame values for the chart and the sphere
+      if (shape === "graph") {
+        for (let b = 0; b < BARS; b++) {
+          const s0 = (b + .5) / BARS, grow = .86 + .14 * Math.sin(t * 1.5 - b * .75);
+          barTop[b] = curve(s0) - .16; barH[b] = (barTop[b] - FLOOR) * grow;
+        }
+      }
       const cs = Math.cos(t * .35), sn = Math.sin(t * .35);
+      const flow = (t * .09) % 1, endS = 1, endX = xAt(endS), endY = curve(endS) + .05;
+      const dS = .02, dirX = endX - xAt(endS - dS), dirY = endY - (curve(endS - dS) + .05), dl = Math.hypot(dirX, dirY);
+      const ax = dirX / dl, ay = dirY / dl;
+
       for (let i = 0; i < N; i++) {
         const k = i * 3; let tx, ty, tz;
         if (shape === "tree") { tx = tree[k] * sc; ty = tree[k + 1] * sc; tz = tree[k + 2] * sc; }
-        else if (shape === "sphere") {
-          const x = sphere[k], z = sphere[k + 2], br = (1 + Math.sin(t * 1.6 + sphere[k + 1] * 4) * .04) * .95;
-          tx = (x * cs - z * sn) * sc * br; ty = sphere[k + 1] * sc * br; tz = (x * sn + z * cs) * sc * br;
-        } else if (shape === "wave") {
-          const gx = grid[i * 2], gz = grid[i * 2 + 1];
-          tx = gx * 1.15 * sc; const zz0 = gz * .9 * sc;
-          const yy = (Math.sin(gx * 3.2 + t * 1.4) * .22 + Math.cos(gz * 4 + t * 1.1) * .16) * sc;
-          ty = yy * .8 - zz0 * .45; tz = yy * .45 + zz0 * .8;
+        else if (shape === "graph") {
+          let x, y, z; const kind = gKind[i];
+          if (kind === 0) { x = gA[i]; y = FLOOR; z = gC[i]; }
+          else if (kind === 1) {
+            const b = Math.floor(gA[i]), fx = gA[i] - b, cxb = xAt((b + .5) / BARS);
+            x = cxb + (fx * 2 - 1) * .085; y = FLOOR + gB[i] * barH[b]; z = gC[i];
+          } else if (kind === 2) {
+            const u = (gA[i] + flow) % 1 * .985;
+            x = xAt(u) + gB[i]; y = curve(u) + .05 + gC[i] + Math.sin(u * 30 - t * 3) * .008; z = 0;
+          } else {
+            const u = gA[i] * .16, v = gB[i] * .2;
+            x = endX + ax * (.1 - u) - ay * v; y = endY + ay * (.1 - u) + ax * v; z = 0;
+          }
+          // tilt: look slightly down on the floor and turn the chart a little
+          const x1 = x * cY + z * sY, z1 = -x * sY + z * cY;
+          const y2 = y * cX - z1 * sX, z2 = y * sX + z1 * cX;
+          tx = (x1 * .8 - .04) * sc; ty = (y2 * .8 + .02) * sc; tz = z2 * .8 * sc;
+        } else if (shape === "sphere") {
+          if (role[i] === 0) {
+            const x = shell[k], z = shell[k + 2], br = (1 + Math.sin(t * 1.6 + shell[k + 1] * 4) * .03) * .98;
+            tx = (x * cs - z * sn) * sc * br; ty = shell[k + 1] * sc * br; tz = (x * sn + z * cs) * sc * br;
+          } else {
+            // icons ride a tilted ring inside the sphere and always face the viewer
+            // a tilted orbit: front icons sit low and large, back icons high and small
+            const ic = icon[k + 2], th = ic / ICONS * Math.PI * 2 - t * .45;
+            const ox = Math.cos(th) * .6, oz = Math.sin(th) * .5, oy = Math.sin(th) * -.4;
+            const front = (Math.sin(th) + 1) / 2, sz = .3 + .22 * front;
+            tx = (ox + icon[k] * sz) * sc; ty = (oy + icon[k + 1] * sz) * sc; tz = oz * sc;
+          }
         } else { tx = scatter[k]; ty = scatter[k + 1]; tz = scatter[k + 2]; }
         const sp = 1 - Math.pow(1 - speed[i], f60);
         pos[k] += (tx - pos[k]) * sp; pos[k + 1] += (ty - pos[k + 1]) * sp; pos[k + 2] += (tz - pos[k + 2]) * sp;
@@ -192,16 +315,8 @@
   })();
   window.REEL_GL = GL;
 
-  /* ---------------- cursor + magnetic buttons ---------------- */
+  /* ---------------- magnetic buttons ---------------- */
   if (finePointer) {
-    const dot = document.querySelector(".r-cursor"), ring = document.querySelector(".r-ring");
-    if (dot && ring) {
-      const dx = gsap.quickTo(dot, "x", { duration: .08 }), dy = gsap.quickTo(dot, "y", { duration: .08 });
-      const rx = gsap.quickTo(ring, "x", { duration: .45, ease: "power3" }), ry = gsap.quickTo(ring, "y", { duration: .45, ease: "power3" });
-      addEventListener("pointermove", e => { document.body.classList.add("r-cursor-on"); dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY); });
-      document.addEventListener("pointerover", e => { if (e.target.closest && e.target.closest("a, button, [data-hover], .r-panel, input, select")) document.body.classList.add("r-hovering"); });
-      document.addEventListener("pointerout", e => { if (e.target.closest && e.target.closest("a, button, [data-hover], .r-panel, input, select")) document.body.classList.remove("r-hovering"); });
-    }
     document.querySelectorAll(".r-magnetic").forEach(el => {
       const xT = gsap.quickTo(el, "x", { duration: .6, ease: "power3" }), yT = gsap.quickTo(el, "y", { duration: .6, ease: "power3" });
       el.addEventListener("pointermove", e => { const r = el.getBoundingClientRect(); xT((e.clientX - r.left - r.width / 2) * .35); yT((e.clientY - r.top - r.height / 2) * .45); });
@@ -226,7 +341,7 @@
     let quick = reduceMotion;
     try { if (C.loaderOncePerSession) { quick = quick || sessionStorage.getItem("r-seen") === "1"; sessionStorage.setItem("r-seen", "1"); } } catch (e) {}
     const counter = { v: 0 }, countEl = document.querySelector(".r-loader-count");
-    const dur = quick ? .45 : 2.3;
+    const dur = quick ? .35 : .9;
     const heads = document.querySelectorAll(C.introSelector);
     gsap.set(".r-hero h1 .r-mask > span", { yPercent: 110 });
     if (heads.length) gsap.set(heads, { autoAlpha: 0, y: -16 });
@@ -236,9 +351,9 @@
       .to(".r-loader-bar", { scaleX: 1, duration: dur, ease: "power2.inOut" }, 0)
       .to([".r-loader-count", ".r-loader-mark", ".r-loader-bar"], { autoAlpha: 0, duration: .3 }, ">-.05")
       .add(() => { GL.S.heroVis = 1; GL.startCycle(); }, "<")
-      .to(".r-loader-half.top", { yPercent: -100, duration: 1.2, ease: "expo.inOut" }, "<.1")
-      .to(".r-loader-half.bottom", { yPercent: 100, duration: 1.2, ease: "expo.inOut" }, "<")
-      .to(".r-hero h1 .r-mask > span", { yPercent: 0, duration: 1.2, stagger: .08, ease: "expo.out" }, "<.55")
+      .to(".r-loader-half.top", { yPercent: -100, duration: .8, ease: "expo.inOut" }, "<.05")
+      .to(".r-loader-half.bottom", { yPercent: 100, duration: .8, ease: "expo.inOut" }, "<")
+      .to(".r-hero h1 .r-mask > span", { yPercent: 0, duration: 1, stagger: .06, ease: "expo.out" }, "<.35")
       .to(".r-hero-reveal", { autoAlpha: 1, duration: .9, ease: "power2.out" }, "<.5")
       .to(heads.length ? heads : {}, { autoAlpha: 1, y: 0, duration: .9, ease: "expo.out", clearProps: "transform" }, "<-.2")
       .add(() => {
@@ -253,8 +368,6 @@
   function scenes() {
     ScrollTrigger.create({ trigger: ".r-hero", start: "top top", end: "bottom top", onUpdate: s => { GL.S.heroVis = 1 - s.progress; } });
     gsap.to(".r-hero h1", { yPercent: -18, ease: "none", scrollTrigger: { trigger: ".r-hero", start: "top top", end: "bottom top", scrub: true } });
-
-    gsap.to(".r-statement .r-w", { opacity: 1, stagger: .1, ease: "none", scrollTrigger: { trigger: ".r-statement .r-big", start: "top 78%", end: "bottom 42%", scrub: .6 } });
 
     const track = document.querySelector(".r-track");
     const dist = () => track.scrollWidth - innerWidth;
@@ -362,7 +475,16 @@
   })();
 
   /* ---------------- go ---------------- */
-  document.querySelectorAll(".reel video").forEach(v => { v.muted = true; v.play().catch(() => {}); });
+  const vids = document.querySelectorAll(".reel video[data-src]");
+  const wake = v => { if (!v.src) { v.src = v.dataset.src; v.preload = "auto"; } };
+  if (reduceMotion) { /* posters only */ }
+  else if ("IntersectionObserver" in window) {
+    const vio = new IntersectionObserver(entries => entries.forEach(e => {
+      const v = e.target; v.muted = true;
+      if (e.isIntersecting) { wake(v); v.play().catch(() => {}); } else if (!v.paused) v.pause();
+    }), { rootMargin: "100px 300px" });
+    vids.forEach(v => vio.observe(v));
+  } else vids.forEach(v => { wake(v); v.muted = true; v.play().catch(() => {}); });
   scenes();
   intro();
   let rT; const refresh = () => { clearTimeout(rT); rT = setTimeout(() => ScrollTrigger.refresh(), 200); };

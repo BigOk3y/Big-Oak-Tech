@@ -34,9 +34,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="assets/img/icons/apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#231C18">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300..700;1,300..700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="preload" href="assets/fonts/plus-jakarta-sans-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/bricolage-grotesque-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
@@ -46,18 +45,16 @@
     <img src="assets/img/logo-white.svg" alt="Big Oak Technologies">
   </a>
   <div class="floating-nav-links" id="floatingNavLinks">
-    <a href="index.html#services">Services</a>
-    <a href="index.html#process">Process</a>
-    <a href="index.html#results">Results</a>
-    <a href="calculator.html">Free Calculator</a>
-    <a href="academy.html">Academy</a>
+    <a href="presence.html">Oak Presence</a>
+    <a href="academy.html">Oak Academy</a>
     <a href="portfolio.html">Portfolio</a>
     <a href="blog/index.html">Blog</a>
+    <a href="calculator.html">Free Website</a>
   </div>
+  <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20book%20a%20free%20call." target="_blank" rel="noopener" class="btn-call floating-nav-cta"><span class="btn-call-dot"></span>Book a free call</a>
   <button class="floating-nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="floatingNavLinks">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
   </button>
-  <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20book%20a%20free%20call." target="_blank" rel="noopener" class="btn-call floating-nav-cta"><span class="btn-call-dot"></span>Book a free call</a>
 </div>
 
 
@@ -66,13 +63,11 @@
   <div class="top-nav">
     <a href="index.html" class="top-nav-logo"><img src="assets/img/logo-white.svg" alt="Big Oak Technologies"></a>
     <div class="top-nav-menu">
-      <a href="index.html#services">Services</a>
-      <a href="index.html#process">Process</a>
-      <a href="index.html#results">Results</a>
-      <a href="calculator.html">Free Calculator</a>
-      <a href="academy.html">Academy</a>
-    <a href="portfolio.html">Portfolio</a>
+      <a href="presence.html">Oak Presence</a>
+      <a href="academy.html">Oak Academy</a>
+      <a href="portfolio.html">Portfolio</a>
       <a href="blog/index.html">Blog</a>
+      <a href="calculator.html">Free Website</a>
     </div>
     <div class="top-nav-cta">
       <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20book%20a%20free%20call." target="_blank" rel="noopener" class="btn-call top-nav-call"><span class="btn-call-dot"></span>Book a free call</a>
@@ -86,13 +81,11 @@
       <a href="tel:+97474089629" class="btn btn-line on-ink btn-sm">Call Us</a>
       <a href="https://wa.me/97474089629?text=Hi%20Big%20Oak%20Technologies%2C%20I%27d%20like%20to%20talk%20about%20growing%20my%20leads." target="_blank" rel="noopener" class="btn btn-dark btn-sm">WhatsApp</a>
     </div>
-    <a href="index.html#services">Services</a>
-    <a href="index.html#process">Process</a>
-    <a href="index.html#results">Results</a>
-    <a href="calculator.html">Free Calculator</a>
-    <a href="academy.html">Academy</a>
+    <a href="presence.html">Oak Presence</a>
+    <a href="academy.html">Oak Academy</a>
     <a href="portfolio.html">Portfolio</a>
     <a href="blog/index.html">Blog</a>
+    <a href="calculator.html">Free Website</a>
   </div>
   <div class="wrap hero-wrap">
     <div>
@@ -119,8 +112,8 @@
           <line x1="22" y1="210" x2="58" y2="210" stroke="#E3C79B" stroke-width="1.2"/>
           <circle cx="210" cy="210" r="88" fill="none" stroke="#9E5A43" stroke-width="1.2" opacity="0.75"/>
           <circle cx="210" cy="210" r="40" fill="#231C18" stroke="#E3C79B" stroke-width="1.2"/>
-          <text x="210" y="205" text-anchor="middle" fill="#E3C79B" font-family="Fraunces, serif" font-size="13" font-style="italic">Oak</text>
-          <text x="210" y="222" text-anchor="middle" fill="#E3C79B" font-family="Fraunces, serif" font-size="13" font-style="italic">Academy</text>
+          <text x="210" y="205" text-anchor="middle" fill="#E3C79B" font-family="Plus Jakarta Sans, sans-serif" font-size="13">Oak</text>
+          <text x="210" y="222" text-anchor="middle" fill="#E3C79B" font-family="Plus Jakarta Sans, sans-serif" font-size="13">Academy</text>
         </svg>
       </div>
       <div class="ring-chip rc1">Photoshop</div>
@@ -242,7 +235,7 @@
         <label for="name">Full name</label>
         <input type="text" id="name" required placeholder="Jane Doe">
         <label for="phone">Phone number</label>
-        <input type="tel" id="phone" required placeholder="+974 7408 9629">
+        <input type="tel" id="phone" required placeholder="With your country code">
         <label for="service">Which track?</label>
         <select id="service">
           <option>Adobe Photoshop</option>
@@ -260,7 +253,7 @@
   </div>
 </section>
 
-<div class="wrap" style="padding-top:56px; padding-bottom:56px;">
+<div class="wrap" style="padding-top:40px; padding-bottom:40px;">
   <div class="final-cta reveal">
     <h2>Ready to build a real skill?</h2>
     <p>Message us on WhatsApp with your track of choice and we'll walk you through enrollment.</p>
@@ -292,9 +285,9 @@
       <div>
         <h5>Programs</h5>
         <ul>
-          <li><a href="index.html#presence">Oak Presence</a></li>
+          <li><a href="presence.html">Oak Presence</a></li>
           <li><a href="academy.html">Oak Academy</a></li>
-          <li><a href="calculator.html">Free Calculator</a></li>
+          <li><a href="calculator.html">Free Website Calculator</a></li>
         </ul>
       </div>
       <div>
